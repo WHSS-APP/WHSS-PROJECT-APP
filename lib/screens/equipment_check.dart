@@ -9,6 +9,12 @@ class EquipmentCheck extends StatefulWidget {
 }
 
 class _EquipmentCheckState extends State<EquipmentCheck> {
+  //XXX: For Change Color When Select Button
+  Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
+  Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
+  Color buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
+  Color buttonChange = Color.fromRGBO(89, 96, 91, 1);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +35,19 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       ),
       body: Column(
         children: [
+          SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(("Hello Camera"))],
+            children: const [
+              SizedBox(
+                width: 400.0,
+                height: 400.0,
+                child: DecoratedBox(
+                  decoration:
+                      BoxDecoration(color: Color.fromARGB(255, 56, 56, 56)),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 30),
           Row(
@@ -234,9 +250,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 5),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            buttonWarning = Color.fromRGBO(176, 34, 42, 1);
+                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
+                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
+                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(176, 34, 42, 1),
+                            backgroundColor: buttonWarning,
                             fixedSize: Size(75, 40)),
                         child: Text(
                           "เตือน",
@@ -245,9 +268,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 5),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
+                            buttonRepair = Color.fromRGBO(214, 129, 29, 1);
+                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
+                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(214, 129, 29, 1),
+                            backgroundColor: buttonRepair,
                             fixedSize: Size(75, 40)),
                         child: Text(
                           "ซ่อม",
@@ -256,9 +286,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 5),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
+                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
+                            buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
+                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(55, 167, 93, 1),
+                            backgroundColor: buttonSupplement,
                             fixedSize: Size(75, 40)),
                         child: Text(
                           "เสริม",
@@ -267,9 +304,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 5),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
+                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
+                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
+                            buttonChange = Color.fromRGBO(89, 96, 91, 1);
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
+                            backgroundColor: buttonChange,
                             fixedSize: Size(75, 40)),
                         child: Text(
                           "เปลี่ยน",

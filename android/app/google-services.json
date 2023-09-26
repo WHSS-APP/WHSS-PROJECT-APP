@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "409626674437",
+    "project_id": "whss-flutter-demo",
+    "storage_bucket": "whss-flutter-demo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409626674437:android:2016dbc624c1fff5d3236c",
+        "android_client_info": {
+          "package_name": "com.example.project_whss_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdFpq0jrNXL-myqIn6UI_qlAeygbenllA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

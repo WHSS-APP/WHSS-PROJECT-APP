@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 
@@ -48,6 +50,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
           ),
           Expanded(
               child: ListView(
+            scrollDirection: Axis.vertical,
             children: [
               InkWell(
                 child: SingleChildScrollView(
@@ -70,112 +73,147 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                 ),
                                 child: Image.network(
                                   'https://picsum.photos/250?image=9',
-                                  width: 280,
                                 )),
-                            title: Column(children: const [
-                              Row(
-                                children: [
-                                  Text(
-                                    "ภาพที่",
-                                    style: TextStyle(
-                                        fontFamily: 'Prompt',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Color.fromRGBO(57, 137, 123, 1)),
+                            title: Column(children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(21, 29, 40, 1),
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // เพิ่มค่า border radius ตรงนี้
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 8, 25, 8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "ภาพที่",
+                                        style: TextStyle(
+                                          fontFamily: 'Prompt',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color.fromRGBO(255, 153, 0, 1),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 80,
+                                      ),
+                                      Text(
+                                        "K20161027091905",
+                                        style: TextStyle(
+                                          fontFamily: 'Prompt',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    "K20161027091905",
-                                    style: TextStyle(
-                                        fontFamily: 'Prompt',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Color.fromRGBO(57, 137, 123, 1)),
-                                  ),
-                                ],
+                                ),
                               ),
-                              Row(
-                                children: [
-                                  Column(
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromRGBO(21, 29, 40, 1),
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // เพิ่มค่า border radius ตรงนี้
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 8, 25, 8),
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        "ตำแหน่ง",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "ตำแหน่ง",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "ชั้นที่",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "ความเสียหาย",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "การแก้ไข",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        "ชั้นที่",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
+                                      SizedBox(
+                                        width: 30,
                                       ),
-                                      Text(
-                                        "ความเสียหาย",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "ตำแหน่ง",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "ชั้นที่",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "ความเสียหาย",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          ),
+                                          Text(
+                                            "การแก้ไข",
+                                            style: TextStyle(
+                                                fontFamily: 'Prompt',
+                                                fontSize: 16,
+                                                color: Color.fromRGBO(
+                                                    255, 255, 255, 1)),
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        "การแก้ไข",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
-                                      )
                                     ],
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "ตำแหน่ง",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
-                                      ),
-                                      Text(
-                                        "ชั้นที่",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
-                                      ),
-                                      Text(
-                                        "ความเสียหาย",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
-                                      ),
-                                      Text(
-                                        "การแก้ไข",
-                                        style: TextStyle(
-                                            fontFamily: 'Prompt',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Color.fromRGBO(
-                                                57, 137, 123, 1)),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
                             ]),
                           ),

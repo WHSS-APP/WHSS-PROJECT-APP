@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
+import 'package:provider/provider.dart';
+
 
 class EquipmentInspectionRecord extends StatefulWidget {
   const EquipmentInspectionRecord({Key? key});
 
-  @override
-  State<EquipmentInspectionRecord> createState() =>
-      _EquipmentInspectionRecordState();
-}
+
+//   @override
+//   State<EquipmentInspectionRecord> createState() =>
+//       _EquipmentInspectionRecordState();
+// }
+
+class EquipmentInspectionRecord extends StatelessWidget {
+  const EquipmentInspectionRecord({Key? key}) : super(key: key);
 
 class ItemData {
   final String itemName;
@@ -79,6 +86,11 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
 
   @override
   Widget build(BuildContext context) {
+    // Fetch job data from FileController
+    context.read<FileController>().readJobs();
+    // print(context.watch<FileController>().job?.length);
+    // print(context.watch<FileController>().job?[1].location.loct);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

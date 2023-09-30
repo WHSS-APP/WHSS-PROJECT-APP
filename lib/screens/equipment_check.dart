@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
+import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +20,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<FileController>().readText();
-    // print damage data
+    // context.read<FileController>().readText();
+    context.read<FileController>().readDmg('A');
+    context.read<FileController>().readStrLoct('A');
 
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +67,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         MainAxisAlignment.center, // จัดวางแนวตั้งตรงกลาง
                     children: [
                       ElevatedButton(
-                        onPressed: () => context.read<FileController>().writeTextFile(),
+                        onPressed: () =>
+                            context.read<FileController>().writeTextFile(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(214, 129, 20, 1),
                           fixedSize: Size(290, 45),
@@ -77,7 +80,22 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 10),
                       ElevatedButton(
-                        onPressed: () => context.read<FileController>().writeUser(),
+                        onPressed: () async {
+                          Map<String, dynamic> newData = {
+                            "itemName": "E-${DateTime.now().toString()}",
+                            "location": {"strc": "C", "loct": "3"},
+                            "damage": {
+                              "damge": "G",
+                              "code": "E",
+                              "description": "New Damage"
+                            },
+                            "level": "1",
+                            "status": "Repair",
+                            "picturePath": "/new_image.jpg"
+                          };
+                          FileManager fileManager = FileManager();
+                          await fileManager.writeJob(newData);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(146, 136, 125, 1),
                           fixedSize: Size(150, 45),
@@ -545,7 +563,22 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       Column(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              Map<String, dynamic> newData = {
+                                "itemName": "New Item",
+                                "location": {"strc": "C", "loct": "3"},
+                                "damage": {
+                                  "damge": "G",
+                                  "code": "E",
+                                  "description": "New Damage"
+                                },
+                                "level": "1",
+                                "status": "Repair",
+                                "picturePath": "/new_image.jpg"
+                              };
+                              FileManager fileManager = FileManager();
+                              await fileManager.writeJob(newData);
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     Color.fromRGBO(214, 129, 29, 1),

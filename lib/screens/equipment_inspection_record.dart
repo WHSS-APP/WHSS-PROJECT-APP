@@ -20,6 +20,7 @@ class EquipmentInspectionRecord extends StatelessWidget {
   Widget build(BuildContext context) {
     // Fetch job data from FileController
     context.read<FileController>().readJobs();
+    // context.read<FileController>().readDmg();
     // print(context.watch<FileController>().job?.length);
     // print(context.watch<FileController>().job?[1].location.loct);
 

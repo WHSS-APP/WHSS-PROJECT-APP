@@ -1,6 +1,6 @@
 [
   {
-    "damg": "A",
+    "damge": "A",
     "code": [
       {
         "id": "F",
@@ -8,12 +8,12 @@
       },
       {
         "id": "D",
-        "description": "Middle Damge"
+        "description": "Middle damgeeee"
       }
     ]
   },
   {
-    "damg": "B",
+    "damge": "B",
     "code": [
       {
         "id": "D",

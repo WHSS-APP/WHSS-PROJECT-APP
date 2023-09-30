@@ -1,16 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/model/job.dart';
+import 'package:project_whss_app/model/location.dart';
 import 'package:project_whss_app/model/user.dart';
+import 'package:project_whss_app/model/dmg.dart';
 
 class FileController extends ChangeNotifier {
   String _text = '';
   User? _user;
   List<Job>? _job = [];
+  List<DamgeAsset> _damge = [];
+  List<LocationAsset> _strcLoct = [];
 
   String get text => _text;
   User? get user => _user;
   List<Job>? get job => _job;
+  List<DamgeAsset> get damage => _damge;
+  List<LocationAsset> get strcLoct => _strcLoct;
 
   readText() async {
     _text = await FileManager().readTextFile();
@@ -23,11 +29,40 @@ class FileController extends ChangeNotifier {
   }
 
   readJobs() async {
-    dynamic result = await FileManager().readJsonFile();
-    if (result != null) {
-      List<dynamic> jsonList = result;
-      List<Job> jobs = jsonList.map((json) => Job.fromJson(json)).toList();
+    dynamic result = await FileManager().readJob();
+
+    if (result != null && result is List<dynamic>) {
+      // List<dynamic> jsonList = result;
+      List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
       _job = jobs;
+    }
+
+    notifyListeners();
+  }
+
+  readDmg(String query) async {
+    // get result from dmg_code.json assets/data/dmg_code.json
+    dynamic result = await FileManager().readDmg();
+
+    if (result != null && result is List<dynamic>) {
+      // List<dynamic> jsonList = result;
+      List<DamgeAsset> dmg =
+          result.map((json) => DamgeAsset.fromJson(json)).toList();
+      _damge = dmg.where((d) => d.damge == query).toList();
+    }
+
+    notifyListeners();
+  }
+
+  readStrLoct(String query) async {
+    dynamic result = await FileManager().readStrcLoct();
+
+    if (result != null && result is List<dynamic>) {
+      // List<dynamic> jsonList = result;
+      List<LocationAsset> strcLoct =
+          result.map((json) => LocationAsset.fromJson(json)).toList();
+      _strcLoct = strcLoct.where((d) => d.strc == query).toList();
+      // print(_strcLoct.first.loct![0]);
     }
 
     notifyListeners();

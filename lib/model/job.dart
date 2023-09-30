@@ -83,9 +83,9 @@ class Damage {
   });
 
   factory Damage.fromJson(Map<String, dynamic> json) => Damage(
-        damge: json["damge"],
-        code: json["code"],
-        description: json["description"],
+        damge: json["damge"] ,
+        code: json["code"] ,
+        description: json["description"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

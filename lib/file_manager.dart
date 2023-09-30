@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:project_whss_app/model/user.dart';
@@ -63,7 +64,7 @@ class FileManager {
 
     // File file = await _jsonFile;
     File file = await _readJobs;
-
+    print(file);
 
     if (await file.exists()) {
       try {
@@ -83,5 +84,85 @@ class FileManager {
     File file = await _jsonFile;
     await file.writeAsString(json.encode(user));
     return user;
+  }
+
+  //read asset file json
+  Future<Object> readJob() async {
+    String fileContent = '';
+
+    File file = await _jsonFile;
+
+    if (await file.exists()) {
+      try {
+        fileContent = await file.readAsString();
+        return List<Map<String, dynamic>>.from(json.decode(fileContent));
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      try {
+        await file.create(recursive: true);
+        await file.writeAsString(fileContent);
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    return {};
+  }
+
+  // write file Job to tempData.json
+  Future<void> writeJob(Map<String, dynamic> newData) async {
+    File file = await _readJobs;
+    // no file create new file
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+      await file.writeAsString('[]');
+    }
+
+    String fileContent = await file.readAsString();
+
+    List<Map<String, dynamic>> jsonList =
+        List<Map<String, dynamic>>.from(json.decode(fileContent));
+
+    jsonList.add(newData);
+
+    String jsonStr = json.encode(jsonList);
+
+    await file.writeAsString(jsonStr);
+  }
+
+  Future<Object> readDmg() async {
+    String fileContent = '';
+
+    final jsonFile = await rootBundle.loadString('assets/data/dmg_code.json');
+
+    if (jsonFile.isNotEmpty) {
+      try {
+        fileContent = jsonFile;
+        return List<Map<String, dynamic>>.from(json.decode(fileContent));
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    return {};
+  }
+
+  Future<Object> readStrcLoct() async {
+    String fileContent = '';
+
+    final jsonFile = await rootBundle.loadString('assets/data/strc_loct.json');
+
+    if (jsonFile.isNotEmpty) {
+      try {
+        fileContent = jsonFile;
+        return List<Map<String, dynamic>>.from(json.decode(fileContent));
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    return {};
   }
 }

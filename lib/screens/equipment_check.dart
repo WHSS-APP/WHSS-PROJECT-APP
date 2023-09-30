@@ -21,8 +21,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   Widget build(BuildContext context) {
     context.read<FileController>().readText();
     // print damage data
-    context.read<FileController>().readDamage();
-    
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

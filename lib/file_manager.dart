@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:project_whss_app/model/damge.dart';
 import 'package:project_whss_app/model/user.dart';
 
 class FileManager {
@@ -28,9 +27,14 @@ class FileManager {
     return File('$path/whss.txt');
   }
 
-  Future<File> get _jsonFile async {
+  Future<File> get _readJobs async {
     final path = await _dicrectoryPath;
     return File('$path/tempData.json');
+  }
+
+  Future<File> get _jsonFile async {
+    final path = await _dicrectoryPath;
+    return File('$path/whss.json');
   }
 
   Future<String> readTextFile() async {
@@ -58,15 +62,16 @@ class FileManager {
     return text;
   }
 
-  Future<Map<String, dynamic>> readJsonFile() async {
+  Future<Object> readJsonFile() async {
     String fileContent = '';
 
-    File file = await _jsonFile;
+    // File file = await _jsonFile;
+    File file = await _readJobs;
 
     if (await file.exists()) {
       try {
         fileContent = await file.readAsString();
-        return json.decode(fileContent);
+        return List<Map<String, dynamic>>.from(json.decode(fileContent));
       } catch (e) {
         print(e);
       }
@@ -81,20 +86,5 @@ class FileManager {
     File file = await _jsonFile;
     await file.writeAsString(json.encode(user));
     return user;
-  }
-
-  Future<List<Damage>> loadDamageData() async {
-    // Load the JSON file from the assets
-    String jsonString =
-        await rootBundle.loadString('assets/data/dmg_code.json');
-
-    // Parse the JSON data
-    List<dynamic> jsonData = json.decode(jsonString);
-
-    // Convert the JSON data into a list of Damage objects
-    List<Damage> damageList =
-        jsonData.map((item) => Damage.fromJson(item)).toList();
-
-    return damageList;
   }
 }

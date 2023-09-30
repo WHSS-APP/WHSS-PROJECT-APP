@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
+import 'package:provider/provider.dart';
 
 class EquipmentInspectionRecord extends StatefulWidget {
   const EquipmentInspectionRecord({super.key});
@@ -14,6 +16,10 @@ class EquipmentInspectionRecord extends StatefulWidget {
 class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   @override
   Widget build(BuildContext context) {
+    context.read<FileController>().readText();
+    context.read<FileController>().readUser();
+    context.read<FileController>().readJob();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -101,7 +107,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                         width: 80,
                                       ),
                                       Text(
-                                        "K20161027091905",
+                                       context.select((FileController controller) => controller.text),
                                         style: TextStyle(
                                           fontFamily: 'Prompt',
                                           fontWeight: FontWeight.bold,
@@ -178,7 +184,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "ตำแหน่ง",
+                                           context.select((FileController controller) => controller.user?.name ?? 'Unable Name'),
                                             style: TextStyle(
                                                 fontFamily: 'Prompt',
                                                 fontSize: 16,
@@ -186,7 +192,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                     255, 255, 255, 1)),
                                           ),
                                           Text(
-                                            "ชั้นที่",
+                                            context.select((FileController controller) => controller.user?.age ?? 'Unable Name'),
                                             style: TextStyle(
                                                 fontFamily: 'Prompt',
                                                 fontSize: 16,
@@ -194,7 +200,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                     255, 255, 255, 1)),
                                           ),
                                           Text(
-                                            "ความเสียหาย",
+                                            context.select((FileController controller) => controller.user?.nickname ?? 'Unable Name').toString(),
                                             style: TextStyle(
                                                 fontFamily: 'Prompt',
                                                 fontSize: 16,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
+import 'package:provider/provider.dart';
 
 class EquipmentCheck extends StatefulWidget {
   const EquipmentCheck({super.key});
@@ -17,6 +19,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<FileController>().readText();
+    // print damage data
+    context.read<FileController>().readDamage();
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -60,7 +66,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         MainAxisAlignment.center, // จัดวางแนวตั้งตรงกลาง
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.read<FileController>().writeTextFile(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(214, 129, 20, 1),
                           fixedSize: Size(290, 45),
@@ -72,7 +78,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       ),
                       SizedBox(width: 10),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => context.read<FileController>().writeUser(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromRGBO(146, 136, 125, 1),
                           fixedSize: Size(150, 45),

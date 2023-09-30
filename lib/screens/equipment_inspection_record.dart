@@ -1,34 +1,42 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
+import 'package:provider/provider.dart';
 
-class EquipmentInspectionRecord extends StatefulWidget {
-  const EquipmentInspectionRecord({super.key});
+// class EquipmentInspectionRecord extends StatefulWidget {
+//   const EquipmentInspectionRecord({super.key});
 
-  @override
-  State<EquipmentInspectionRecord> createState() =>
-      _EquipmentInspectionRecordState();
-}
+//   @override
+//   State<EquipmentInspectionRecord> createState() =>
+//       _EquipmentInspectionRecordState();
+// }
 
-class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
+class EquipmentInspectionRecord extends StatelessWidget {
+  const EquipmentInspectionRecord({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // Fetch job data from FileController
+    final jobs = context.select((FileController controller) => controller.job);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Equipment Inspection Recode"),
+        title: Text("Equipment Inspection Record"),
         backgroundColor: Color(0xFF151D28),
         leading: BackButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EquipmentCheck(),
-                ),
-              );
-            }),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EquipmentCheck(),
+              ),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

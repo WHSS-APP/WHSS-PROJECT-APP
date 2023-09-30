@@ -6,11 +6,11 @@ import 'package:project_whss_app/model/user.dart';
 class FileController extends ChangeNotifier {
   String _text = '';
   User? _user;
-  Job? _job;
+  List<Job>? _job = [];
 
   String get text => _text;
   User? get user => _user;
-  Job? get job => _job;
+  List<Job>? get job => _job;
 
   readText() async {
     _text = await FileManager().readTextFile();
@@ -24,12 +24,10 @@ class FileController extends ChangeNotifier {
 
   readJobs() async {
     dynamic result = await FileManager().readJsonFile();
-
     if (result != null) {
       List<dynamic> jsonList = result;
       List<Job> jobs = jsonList.map((json) => Job.fromJson(json)).toList();
-      _job = jobs as Job?;
-
+      _job = jobs;
     }
 
     notifyListeners();

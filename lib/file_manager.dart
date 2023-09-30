@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:project_whss_app/model/user.dart';
@@ -16,9 +15,6 @@ class FileManager {
 
   Future<String> get _dicrectoryPath async {
     Directory? directory = await getExternalStorageDirectory();
-
-    print(directory);
-
     return directory?.path ?? '';
   }
 
@@ -67,6 +63,7 @@ class FileManager {
 
     // File file = await _jsonFile;
     File file = await _readJobs;
+
 
     if (await file.exists()) {
       try {

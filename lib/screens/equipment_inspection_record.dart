@@ -19,7 +19,9 @@ class EquipmentInspectionRecord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch job data from FileController
-    final jobs = context.select((FileController controller) => controller.job);
+    context.read<FileController>().readJobs();
+    // print(context.watch<FileController>().job?.length);
+    // print(context.watch<FileController>().job?[1].location.loct);
 
     return Scaffold(
       appBar: AppBar(

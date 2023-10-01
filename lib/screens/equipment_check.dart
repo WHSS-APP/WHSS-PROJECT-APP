@@ -17,6 +17,7 @@ class EquipmentCheck extends StatefulWidget {
 
 class _EquipmentCheckState extends State<EquipmentCheck> {
   File? _selectedImage;
+  String? _itemName;
 
   Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
   Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
@@ -67,24 +68,28 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
     if (returnedImage == null) return;
 
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMddHHmmss').format(now);
+
     final originalImage =
         img.decodeImage(File(returnedImage.path).readAsBytesSync());
     if (originalImage != null) {
-      final appDocumentsDir = await getApplicationDocumentsDirectory();
-      final imagesDir = Directory('${appDocumentsDir.path}/Images');
+      final appDocumentsDir = await getExternalStorageDirectory();
+      final imagesDir = Directory('${appDocumentsDir?.path}/Images');
 
       if (!imagesDir.existsSync()) {
         imagesDir.createSync(recursive: true);
       }
 
       final newImagePath =
-          '${imagesDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
+          '${imagesDir.path}/K$formattedDate.png';
       final resizedImage =
           img.copyResize(originalImage, width: 400, height: 400);
       File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
 
       setState(() {
         _selectedImage = File(newImagePath);
+        _itemName = formattedDate;
       });
     }
   }

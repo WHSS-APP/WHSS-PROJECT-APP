@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/model/job.dart';

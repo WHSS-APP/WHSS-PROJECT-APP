@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
-import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/model/job.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +53,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xFFffffff),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.grey,
                       blurRadius: 15.0,
@@ -103,7 +102,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: Color(0xFFffffff),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.grey,
                             blurRadius: 15.0,

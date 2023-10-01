@@ -1,327 +1,337 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 
 class EquipmentCheck extends StatefulWidget {
-  const EquipmentCheck({super.key});
+  const EquipmentCheck({Key? key});
 
   @override
   State<EquipmentCheck> createState() => _EquipmentCheckState();
 }
 
 class _EquipmentCheckState extends State<EquipmentCheck> {
-  //XXX: For Change Color When Select Button
+  File? _selectedImage;
+
   Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
   Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
   Color buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
   Color buttonChange = Color.fromRGBO(89, 96, 91, 1);
 
+  Widget _buildButton(
+    double width,
+    double height,
+    VoidCallback onPressed,
+    String label,
+    Color backgroundColor,
+    double fontsize,
+  ) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontsize),
+        ),
+      ),
+    );
+  }
+
+  void _changeButtonColor(
+    Color warningColor,
+    Color repairColor,
+    Color supplementColor,
+    Color changeColor,
+  ) {
+    setState(() {
+      buttonWarning = warningColor;
+      buttonRepair = repairColor;
+      buttonSupplement = supplementColor;
+      buttonChange = changeColor;
+    });
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedImage == null) return;
+
+    final originalImage =
+        img.decodeImage(File(returnedImage.path).readAsBytesSync());
+    if (originalImage != null) {
+      final appDocumentsDir = await getApplicationDocumentsDirectory();
+      final imagesDir = Directory('${appDocumentsDir.path}/Images');
+
+      if (!imagesDir.existsSync()) {
+        imagesDir.createSync(recursive: true);
+      }
+
+      final newImagePath =
+          '${imagesDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
+      final resizedImage =
+          img.copyResize(originalImage, width: 400, height: 400);
+      File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+
+      setState(() {
+        _selectedImage = File(newImagePath);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenFontSize = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text("Equipment Check"),
         backgroundColor: Color(0xFF151D28),
         leading: BackButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EquipmentInspectionRecord(),
-                ),
-              );
-            }),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EquipmentInspectionRecord(),
+              ),
+            );
+          },
+        ),
       ),
       body: Column(
         children: [
-          SizedBox(height: 50),
+          SizedBox(height: screenHeight * 0.02),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              SizedBox(
-                width: 400.0,
-                height: 400.0,
-                child: DecoratedBox(
-                  decoration:
-                      BoxDecoration(color: Color.fromARGB(255, 56, 56, 56)),
-                ),
-              ),
+            children: [
+              _selectedImage != null
+                  ? Image.file(
+                      _selectedImage!,
+                      width: screenWidth * 0.9,
+                      height: screenHeight * 0.3,
+                      fit: BoxFit.contain,
+                    )
+                  : const Text("เลือก Take Photo เพื่อถ่ายภาพ"),
+              SizedBox(height: screenHeight * 0.35),
             ],
           ),
-          SizedBox(height: 30),
+          SizedBox(height: screenHeight * 0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
                   Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // จัดวางแนวตั้งตรงกลาง
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(214, 129, 20, 1),
-                          fixedSize: Size(290, 45),
-                        ),
-                        child: Text(
-                          "Take Photo",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromRGBO(146, 136, 125, 1),
-                          fixedSize: Size(150, 45),
-                        ),
-                        child: Text(
-                          "Refresh",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      SizedBox(
+                        width: screenWidth - 215,
+                        height: screenHeight * 0.06,
+                        child: MaterialButton(
+                          color: Color.fromRGBO(214, 129, 29, 1),
+                          child: const Text(
+                            "Take Photo",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            _pickImageFromCamera();
+                          },
                         ),
                       ),
+                      SizedBox(width: screenWidth * 0.01),
+                      SizedBox(
+                          width: screenWidth - 320,
+                          height: screenHeight * 0.06,
+                          child: MaterialButton(
+                            color: Color.fromRGBO(146, 136, 125, 1),
+                            child: const Text(
+                              "Refresh",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _selectedImage = null;
+                              });
+                            },
+                          )),
                     ],
                   ),
+                  SizedBox(height: screenHeight * 0.012),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "BLK",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(146, 136, 125, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                          Color.fromRGBO(89, 96, 91, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "LVL",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(176, 34, 42, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(146, 136, 125, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "STRC",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(214, 129, 29, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(176, 34, 42, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "LOCT",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(55, 167, 93, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(249, 152, 36, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "DAMG",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(55, 167, 93, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "CODE",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                          Color.fromRGBO(89, 96, 91, 1),
+                          screenFontSize * 0.025),
                     ],
                   ),
+                  SizedBox(height: screenHeight * 0.005),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "4",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(146, 136, 125, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                          Color.fromRGBO(89, 96, 91, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "4",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(176, 34, 42, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(146, 136, 125, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "A",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(214, 129, 29, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(176, 34, 42, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "3",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(55, 167, 93, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(249, 152, 36, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "F",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
-                            fixedSize: Size(75, 40)),
-                        child: Text(
+                          Color.fromRGBO(55, 167, 93, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 410,
+                          screenHeight * 0.045,
+                          () {},
                           "D",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                          Color.fromRGBO(89, 96, 91, 1),
+                          screenFontSize * 0.025),
                     ],
                   ),
+                  SizedBox(height: screenHeight * 0.005),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(89, 96, 91, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "3",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(146, 136, 125, 1),
-                            fixedSize: Size(40, 40)),
-                        child: Text(
+                          Color.fromRGBO(89, 96, 91, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(
+                          screenWidth - 415,
+                          screenHeight * 0.045,
+                          () {},
                           "3",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonWarning = Color.fromRGBO(176, 34, 42, 1);
-                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
-                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
-                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonWarning,
-                            fixedSize: Size(75, 40)),
-                        child: Text(
-                          "เตือน",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
-                            buttonRepair = Color.fromRGBO(214, 129, 29, 1);
-                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
-                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonRepair,
-                            fixedSize: Size(75, 40)),
-                        child: Text(
-                          "ซ่อม",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
-                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
-                            buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
-                            buttonChange = Color.fromRGBO(167, 171, 168, 1);
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonSupplement,
-                            fixedSize: Size(75, 40)),
-                        child: Text(
-                          "เสริม",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            buttonWarning = Color.fromRGBO(221, 163, 166, 1);
-                            buttonRepair = Color.fromRGBO(221, 200, 177, 1);
-                            buttonSupplement = Color.fromRGBO(168, 217, 184, 1);
-                            buttonChange = Color.fromRGBO(89, 96, 91, 1);
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: buttonChange,
-                            fixedSize: Size(75, 40)),
-                        child: Text(
-                          "เปลี่ยน",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                          Color.fromRGBO(146, 136, 125, 1),
+                          screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(screenWidth - 410, screenHeight * 0.045, () {
+                        _changeButtonColor(
+                          Color.fromRGBO(176, 34, 42, 1),
+                          Color.fromRGBO(221, 200, 177, 1),
+                          Color.fromRGBO(168, 217, 184, 1),
+                          Color.fromRGBO(167, 171, 168, 1),
+                        );
+                      }, "เตือน", buttonWarning, screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(screenWidth - 410, screenHeight * 0.045, () {
+                        _changeButtonColor(
+                          Color.fromRGBO(238, 167, 171, 1),
+                          Color.fromRGBO(214, 129, 29, 1),
+                          Color.fromRGBO(168, 217, 184, 1),
+                          Color.fromRGBO(167, 171, 168, 1),
+                        );
+                      }, "ซ่อม", buttonRepair, screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(screenWidth - 410, screenHeight * 0.045, () {
+                        _changeButtonColor(
+                          Color.fromRGBO(238, 167, 171, 1),
+                          Color.fromRGBO(221, 200, 177, 1),
+                          Color.fromRGBO(55, 167, 93, 1),
+                          Color.fromRGBO(167, 171, 168, 1),
+                        );
+                      }, "เสริม", buttonSupplement, screenFontSize * 0.025),
+                      SizedBox(width: screenWidth * 0.01),
+                      _buildButton(screenWidth - 410, screenHeight * 0.045, () {
+                        _changeButtonColor(
+                          Color.fromRGBO(238, 167, 171, 1),
+                          Color.fromRGBO(221, 200, 177, 1),
+                          Color.fromRGBO(168, 217, 184, 1),
+                          Color.fromRGBO(89, 96, 91, 1),
+                        );
+                      }, "เปลี่ยน", buttonChange, screenFontSize * 0.025),
                     ],
                   ),
+                  SizedBox(height: screenHeight * 0.005),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -330,226 +340,152 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(89, 96, 91, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text(
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "2",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(146, 136, 125, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text(
+                                  Color.fromRGBO(89, 96, 91, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "2",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(3, 98, 166, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(146, 136, 125, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "7",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(214, 129, 29, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(3, 98, 166, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "8",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(3, 98, 166, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(249, 152, 36, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "9",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
+                                  Color.fromRGBO(3, 98, 166, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
                             ],
                           ),
-                          SizedBox(width: 5),
+                          SizedBox(height: screenHeight * 0.005),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(89, 96, 91, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text("1"),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(146, 136, 125, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text(
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "1",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(4, 192, 240, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(89, 96, 91, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
+                                  "1",
+                                  Color.fromRGBO(146, 136, 125, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "4",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(218, 24, 116, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(4, 192, 240, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "5",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(4, 192, 240, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(218, 24, 116, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "6",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
+                                  Color.fromRGBO(4, 192, 240, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
                             ],
                           ),
+                          SizedBox(height: screenHeight * 0.005),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(89, 96, 91, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text(
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "T",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(146, 136, 125, 1),
-                                    fixedSize: Size(40, 40)),
-                                child: Text(
+                                  Color.fromRGBO(89, 96, 91, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 415,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "T",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(3, 98, 166, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(146, 136, 125, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "1",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(214, 129, 29, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(3, 98, 166, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "2",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Color.fromRGBO(3, 98, 166, 1),
-                                    fixedSize: Size(75, 40)),
-                                child: Text(
+                                  Color.fromRGBO(249, 152, 36, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
+                              _buildButton(
+                                  screenWidth - 410,
+                                  screenHeight * 0.045,
+                                  () {},
                                   "3",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(width: 5),
+                                  Color.fromRGBO(3, 98, 166, 1),
+                                  screenFontSize * 0.025),
+                              SizedBox(width: screenWidth * 0.01),
                             ],
                           )
                         ],
                       ),
+                      SizedBox(height: screenHeight * 0.005),
                       Column(
                         children: [
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromRGBO(214, 129, 29, 1),
-                                fixedSize: Size(75, 135)),
-                            child: Text(
+                          _buildButton(
+                              screenWidth - 410,
+                              screenHeight * 0.145,
+                              () {},
                               "บันทึก",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                              Color.fromRGBO(249, 152, 36, 1),
+                              screenFontSize * 0.025),
                         ],
                       )
                     ],

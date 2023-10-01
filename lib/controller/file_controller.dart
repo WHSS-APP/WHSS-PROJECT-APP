@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/model/job.dart';
@@ -30,10 +31,40 @@ class FileController extends ChangeNotifier {
 
   readJobs() async {
     dynamic result = await FileManager().readJob();
+    // print(result);
 
     if (result != null && result is List<dynamic>) {
       // List<dynamic> jsonList = result;
       List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
+      _job = jobs;
+    }
+
+    notifyListeners();
+  }
+
+  readJobById(String id) async {
+    dynamic result = await FileManager().readJob();
+    // print(result);
+
+    if (result != null && result is List<dynamic>) {
+      // List<dynamic> jsonList = result;
+      List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
+      _job = jobs.where((j) => j.itemName == id).toList();
+    }
+
+    notifyListeners();
+  }
+
+  updateJob(Job job) async {
+    dynamic result = await FileManager().readJob();
+    // print(result);
+
+    if (result != null && result is List<dynamic>) {
+      // List<dynamic> jsonList = result;
+      List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
+      jobs.removeWhere((j) => j.itemName == job.itemName);
+      jobs.add(job);
+      await FileManager().writeJob(jobs as Map<String, dynamic>);
       _job = jobs;
     }
 

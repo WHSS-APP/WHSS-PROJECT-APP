@@ -3,6 +3,7 @@ import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class EquipmentCheck extends StatefulWidget {
   const EquipmentCheck({super.key});
@@ -81,8 +82,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () async {
+                          DateTime now = DateTime.now();
+                          String formattedDate =
+                              DateFormat('yyyyMMddHHmmss').format(now);
                           Map<String, dynamic> newData = {
-                            "itemName": "E-${DateTime.now().toString()}",
+                            "itemName": "E$formattedDate",
                             "location": {"strc": "C", "loct": "3"},
                             "damage": {
                               "damge": "G",
@@ -90,6 +94,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               "description": "New Damage"
                             },
                             "level": "1",
+                            "block": "B",
+                            "direction": "4",
                             "status": "Repair",
                             "picturePath": "/new_image.jpg"
                           };
@@ -573,6 +579,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                   "description": "New Damage"
                                 },
                                 "level": "1",
+                                "block": "B",
+                                "direction": "4",
                                 "status": "Repair",
                                 "picturePath": "/new_image.jpg"
                               };

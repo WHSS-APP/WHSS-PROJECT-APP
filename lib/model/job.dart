@@ -15,6 +15,8 @@ class Job {
   Location location;
   Damage damage;
   String level;
+  String block;
+  String direction;
   String status;
   String picturePath;
 
@@ -23,6 +25,8 @@ class Job {
     required this.location,
     required this.damage,
     required this.level,
+    required this.block,
+    required this.direction,
     required this.status,
     required this.picturePath,
   });
@@ -36,6 +40,8 @@ class Job {
             ? Damage.fromJson(json["damage"])
             : Damage(damge: "", code: "", description: ""),
         level: json["level"] ?? "",
+        block: json["block"] ?? "",
+        direction: json["direction"] ?? "",
         status: json["status"] ?? "",
         picturePath: json["picturePath"] ?? "",
       );
@@ -47,28 +53,11 @@ class Job {
         "location": location.toJson(),
         "damage": damage.toJson(),
         "level": level,
+        "block": block,
+        "direction": direction,
         "status": status,
         "picturePath": picturePath,
       };
-
-  dynamic operator [](String key) {
-    switch (key) {
-      case 'itemName':
-        return itemName;
-      case 'location':
-        return location;
-      case 'damage':
-        return damage;
-      case 'level':
-        return level;
-      case 'status':
-        return status;
-      case 'picturePath':
-        return picturePath;
-      default:
-        throw ArgumentError('Invalid key: $key');
-    }
-  }
 }
 
 class Damage {
@@ -83,8 +72,8 @@ class Damage {
   });
 
   factory Damage.fromJson(Map<String, dynamic> json) => Damage(
-        damge: json["damge"] ,
-        code: json["code"] ,
+        damge: json["damge"],
+        code: json["code"],
         description: json["description"] ?? "",
       );
 

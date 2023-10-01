@@ -90,7 +90,9 @@ class FileManager {
   Future<Object> readJob() async {
     String fileContent = '';
 
-    File file = await _jsonFile;
+    File file = await _readJobs;
+
+    print(file);
 
     if (await file.exists()) {
       try {
@@ -127,6 +129,25 @@ class FileManager {
 
     jsonList.add(newData);
 
+    String jsonStr = json.encode(jsonList);
+
+    await file.writeAsString(jsonStr);
+  }
+
+  updateJob(Map<String, dynamic> newData) async {
+    File file = await _readJobs;
+    String fileContent = await file.readAsString();
+
+    List<Map<String, dynamic>> jsonList =
+        List<Map<String, dynamic>>.from(json.decode(fileContent));
+
+    // update data by == itemName
+    for (var i = 0; i < jsonList.length; i++) {
+      if (jsonList[i]['itemName'] == newData['itemName']) {
+        jsonList[i] = newData;
+      }
+    }
+ 
     String jsonStr = json.encode(jsonList);
 
     await file.writeAsString(jsonStr);

@@ -1,82 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
+import 'package:project_whss_app/file_manager.dart';
+import 'package:project_whss_app/model/job.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 import 'package:provider/provider.dart';
-
 
 class EquipmentInspectionRecord extends StatefulWidget {
   const EquipmentInspectionRecord({Key? key});
 
-
-//   @override
-//   State<EquipmentInspectionRecord> createState() =>
-//       _EquipmentInspectionRecordState();
-// }
-
-class EquipmentInspectionRecord extends StatelessWidget {
-  const EquipmentInspectionRecord({Key? key}) : super(key: key);
-
-class ItemData {
-  final String itemName;
-  final Map location;
-  final Map damge;
-  final String level;
-  final String block;
-  final String direction;
-  final String status;
-  ItemData(this.itemName, this.location, this.damge, this.level, this.block,
-      this.direction, this.status);
-
-  factory ItemData.fromJson(Map<String, dynamic> json) {
-    return ItemData(json['itemName'], json['location'], json['damge'],
-        json['level'], json['block'], json['direction'], json['status']);
-  }
+  @override
+  State<EquipmentInspectionRecord> createState() =>
+      _EquipmentInspectionRecordState();
 }
 
 class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
-  List<ItemData> filteredData = [];
-  List<ItemData> result_data = [
-    {
-      "itemName": "K201600",
-      "location": {"strc": "A", "loct": "1"},
-      "damge": {"damge": "F", "code": "D", "description": "เป็นสนิม"},
-      "level": "0",
-      "block": "1",
-      "direction": "9",
-      "status": "ซ่อม",
-      "picturePath": "/"
-    },
-    {
-      "itemName": "K201600",
-      "location": {"strc": "B", "loct": "2"},
-      "damge": {"damge": "", "code": "", "description": ""},
-      "level": "",
-      "block": "1",
-      "direction": "9",
-      "status": "",
-      "picturePath": "/"
-    },
-    {
-      "itemName": "K201600",
-      "location": {"strc": "", "loct": ""},
-      "damge": {"damge": "", "code": ""},
-      "level": "",
-      "block": "1",
-      "direction": "2",
-      "status": "",
-      "picturePath": "/"
-    },
-    {
-      "itemName": "K201600",
-      "location": {"strc": "", "loct": ""},
-      "damge": {"damge": "", "code": "", "description": ""},
-      "level": "",
-      "block": "1",
-      "direction": "",
-      "status": "",
-      "picturePath": "/"
-    }
-  ].map((item) => ItemData.fromJson(item)).toList();
+  late List<Job> filteredData = [];
+  // ignore: non_constant_identifier_names
+  late List<Job> result_data = context.read<FileController>().job!;
 
   @override
   void initState() {
@@ -86,11 +26,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch job data from FileController
     context.read<FileController>().readJobs();
-    // context.read<FileController>().readDmg();
-    // print(context.watch<FileController>().job?.length);
-    // print(context.watch<FileController>().job?[1].location.loct);
 
     return Scaffold(
       appBar: AppBar(
@@ -132,36 +68,32 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: TextField(
-                  decoration: InputDecoration(
-                    hintText: '',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
+                    decoration: InputDecoration(
+                      hintText: '',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      labelText:
+                          'ค้นหาด้วย เลขภาพ, ตำแหน่ง, ความเสียหาย, การแก้ไข...',
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Colors.grey,
+                      ),
                     ),
-                    labelText:
-                        'ค้นหาด้วย เลขภาพ, ตำแหน่ง, ความเสียหาย, การแก้ไข...',
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  onChanged: (query) {
-                    setState(() {
-                      filteredData = result_data
-                          .where((item) =>
-                              item.itemName.contains(query) ||
-                              (item.location["strc"] != null &&
-                                  item.location["strc"].contains(query)) ||
-                              (item.location["loct"] != null &&
-                                  item.location["loct"].contains(query)) ||
-                              (item.status != null &&
-                                  item.status.contains(query)) ||
-                              (item.damge["description"] != null &&
-                                  item.damge["description"].contains(query)))
-                          .toList();
-                    });
-                  },
-                ),
+                    onChanged: (query) {
+                      setState(() {
+                        filteredData = result_data
+                            .where((item) =>
+                                item.itemName.contains(query) ||
+                                (item.location.strc + item.location.loct)
+                                    .contains(query) ||
+                                (item.location.loct.contains(query)) ||
+                                (item.status.contains(query)) ||
+                                (item.damage.description.contains(query)))
+                            .toList();
+                      });
+                    }),
               ),
               SizedBox(height: 10),
               Column(
@@ -263,23 +195,13 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  data.location != null &&
-                                                          data.location[
-                                                                  "strc"] !=
-                                                              null
-                                                      ? data.location["strc"]
-                                                      : "-",
+                                                  data.location.strc,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),
                                                 ),
                                                 Text(
-                                                  data.location != null &&
-                                                          data.location[
-                                                                  "loct"] !=
-                                                              null
-                                                      ? data.location["loct"]
-                                                      : "-",
+                                                  data.location.loct,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -302,9 +224,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  data.level != null
-                                                      ? data.level
-                                                      : "-",
+                                                  data.level,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -322,9 +242,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  data.block != null
-                                                      ? data.block
-                                                      : "-",
+                                                  data.block,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -336,9 +254,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  data.direction != null
-                                                      ? data.direction
-                                                      : "-",
+                                                  data.direction,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -365,12 +281,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                               ),
                                             ),
                                             Text(
-                                              data.damge != null &&
-                                                      data.damge[
-                                                              "description"] !=
-                                                          null
-                                                  ? data.damge["description"]
-                                                  : "-",
+                                              data.damage.description,
                                               style: TextStyle(
                                                 color: Colors.white,
                                               ),

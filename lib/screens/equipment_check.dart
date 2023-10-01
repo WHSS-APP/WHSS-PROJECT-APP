@@ -89,7 +89,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
       setState(() {
         _selectedImage = File(newImagePath);
-        _itemName = formattedDate;
+        _itemName = 'K$formattedDate';
       });
     }
   }

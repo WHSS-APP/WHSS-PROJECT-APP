@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
+import 'package:project_whss_app/model/job.dart';
+import 'package:project_whss_app/model/dmg.dart';
+import 'package:project_whss_app/model/location.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +22,8 @@ class EquipmentCheck extends StatefulWidget {
 class _EquipmentCheckState extends State<EquipmentCheck> {
   File? _selectedImage;
   String? _itemName;
+  late List<DamgeAsset> damgeCode = context.read<FileController>().damage;
+  late List<LocationAsset> strcLoctCode = context.read<FileController>().strcLoct;
 
   Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
   Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
@@ -81,8 +87,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         imagesDir.createSync(recursive: true);
       }
 
-      final newImagePath =
-          '${imagesDir.path}/K$formattedDate.png';
+      final newImagePath = '${imagesDir.path}/K$formattedDate.png';
       final resizedImage =
           img.copyResize(originalImage, width: 400, height: 400);
       File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));

@@ -70,7 +70,7 @@ class FileController extends ChangeNotifier {
     notifyListeners();
   }
 
-  readDmg(String query) async {
+  readDmg() async {
     // get result from dmg_code.json assets/data/dmg_code.json
     dynamic result = await FileManager().readDmg();
 
@@ -78,21 +78,20 @@ class FileController extends ChangeNotifier {
       // List<dynamic> jsonList = result;
       List<DamgeAsset> dmg =
           result.map((json) => DamgeAsset.fromJson(json)).toList();
-      _damge = dmg.where((d) => d.damge == query).toList();
+      _damge = dmg;
     }
 
     notifyListeners();
   }
 
-  readStrLoct(String query) async {
+  readStrLoct() async {
     dynamic result = await FileManager().readStrcLoct();
 
     if (result != null && result is List<dynamic>) {
       // List<dynamic> jsonList = result;
       List<LocationAsset> strcLoct =
           result.map((json) => LocationAsset.fromJson(json)).toList();
-      _strcLoct = strcLoct.where((d) => d.strc == query).toList();
-      // print(_strcLoct.first.loct![0]);
+      _strcLoct = strcLoct;
     }
 
     notifyListeners();

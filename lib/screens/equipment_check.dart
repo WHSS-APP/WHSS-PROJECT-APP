@@ -5,6 +5,8 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class EquipmentCheck extends StatefulWidget {
   const EquipmentCheck({Key? key});

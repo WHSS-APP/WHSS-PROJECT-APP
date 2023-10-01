@@ -1,0 +1,28 @@
+[
+  {
+    "damge": "A",
+    "code": [
+      {
+        "id": "F",
+        "description": "Minimal damage"
+      },
+      {
+        "id": "D",
+        "description": "Middle damgeeee"
+      }
+    ]
+  },
+  {
+    "damge": "B",
+    "code": [
+      {
+        "id": "D",
+        "description": "Rust"
+      },
+      {
+        "id": "T",
+        "description": "Burn"
+      }
+    ]
+  }
+]

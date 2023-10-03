@@ -1,4 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
@@ -26,11 +30,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   late List<LocationAsset> strcLoctCode =
       context.read<FileController>().strcLoct;
 
-  Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
-  Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
-  Color buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
-  Color buttonChange = Color.fromRGBO(89, 96, 91, 1);
-
   Widget _buildButton(double width, double height, VoidCallback onPressed,
       String label, Color backgroundColor, double fontsize, Color fontColor) {
     return Container(
@@ -52,6 +51,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     );
   }
 
+  Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
+  Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
+  Color buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
+  Color buttonChange = Color.fromRGBO(89, 96, 91, 1);
+
   void _changeButtonColor(
     Color warningColor,
     Color repairColor,
@@ -63,6 +67,74 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       buttonRepair = repairColor;
       buttonSupplement = supplementColor;
       buttonChange = changeColor;
+    });
+  }
+
+  Color BLKbtn1 = Color.fromRGBO(89, 96, 91, 1);
+  Color BLKbtn2 = Color.fromRGBO(89, 96, 91, 1);
+  Color BLKbtn3 = Color.fromRGBO(89, 96, 91, 1);
+  Color BLKbtn4 = Color.fromRGBO(89, 96, 91, 1);
+  Color BLKbtnAdd = Color.fromRGBO(89, 96, 91, 1);
+
+  void _changeButtonBLKColor(
+      Color btn1, Color btn2, Color btn3, Color btn4, Color btnAdd) {
+    setState(() {
+      BLKbtn1 = btn1;
+      BLKbtn2 = btn2;
+      BLKbtn3 = btn3;
+      BLKbtn4 = btn4;
+      BLKbtnAdd = btnAdd;
+    });
+  }
+
+  Color LVLbtn1 = Color.fromRGBO(146, 136, 125, 1);
+  Color LVLbtn2 = Color.fromRGBO(146, 136, 125, 1);
+  Color LVLbtn3 = Color.fromRGBO(146, 136, 125, 1);
+  Color LVLbtn4 = Color.fromRGBO(146, 136, 125, 1);
+  Color LVLbtnAdd = Color.fromRGBO(146, 136, 125, 1);
+
+  void _changeButtonLVLColor(
+      Color btn1, Color btn2, Color btn3, Color btn4, Color btnAdd) {
+    setState(() {
+      LVLbtn1 = btn1;
+      LVLbtn2 = btn2;
+      LVLbtn3 = btn3;
+      LVLbtn4 = btn4;
+      LVLbtnAdd = btnAdd;
+    });
+  }
+
+  Color Numbtn1 = Color.fromRGBO(3, 98, 166, 1);
+  Color Numbtn2 = Color.fromRGBO(249, 152, 36, 1);
+  Color Numbtn3 = Color.fromRGBO(3, 98, 166, 1);
+  Color Numbtn4 = Color.fromRGBO(4, 192, 240, 1);
+  Color Numbtn5 = Color.fromRGBO(218, 24, 116, 1);
+  Color Numbtn6 = Color.fromRGBO(4, 192, 240, 1);
+  Color Numbtn7 = Color.fromRGBO(3, 98, 166, 1);
+  Color Numbtn8 = Color.fromRGBO(249, 152, 36, 1);
+  Color Numbtn9 = Color.fromRGBO(3, 98, 166, 1);
+
+  void _changeButtonNumColor(
+    Color btn1,
+    Color btn2,
+    Color btn3,
+    Color btn4,
+    Color btn5,
+    Color btn6,
+    Color btn7,
+    Color btn8,
+    Color btn9,
+  ) {
+    setState(() {
+      Numbtn1 = btn1;
+      Numbtn2 = btn2;
+      Numbtn3 = btn3;
+      Numbtn4 = btn4;
+      Numbtn5 = btn5;
+      Numbtn6 = btn6;
+      Numbtn7 = btn7;
+      Numbtn8 = btn8;
+      Numbtn9 = btn9;
     });
   }
 
@@ -96,6 +168,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       });
     }
   }
+
+  String selectedSTRC = '';
+  String selectedLOCT = '';
+  String selectedDAMG = '';
+  String selectedCODE = '';
+  final List<String> optionsSTRC = ['A', 'B', 'C', 'D'];
+  final List<String> optionsLOCT = ['1', '2', '3', '4'];
+  final List<String> optionsDAMG = ['F', 'U', 'B'];
+  final List<String> optionsCODE = ['D', 'A', 'N', 'C'];
 
   @override
   Widget build(BuildContext context) {
@@ -245,8 +326,35 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 7,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
+                                : screenHeight / 28, () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('STRC'),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: optionsSTRC.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(optionsSTRC[index]),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedSTRC = optionsSTRC[index];
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                             "STRC",
                             Color.fromRGBO(176, 34, 42, 1),
                             screenFontSize >= 480
@@ -260,8 +368,35 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 7,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
+                                : screenHeight / 28, () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('LOCT'),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: optionsLOCT.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(optionsLOCT[index]),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedLOCT = optionsLOCT[index];
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                             "LOCT",
                             Color.fromRGBO(249, 152, 36, 1),
                             screenFontSize >= 480
@@ -275,8 +410,35 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 6.7,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
+                                : screenHeight / 28, () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('DAMG'),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: optionsDAMG.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(optionsDAMG[index]),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedDAMG = optionsDAMG[index];
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                             "DAMG",
                             Color.fromRGBO(55, 167, 93, 1),
                             screenFontSize >= 480
@@ -290,8 +452,35 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 7,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
+                                : screenHeight / 28, () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('CODE'),
+                                content: Container(
+                                  width: double.maxFinite,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: optionsCODE.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        title: Text(optionsCODE[index]),
+                                        onTap: () {
+                                          setState(() {
+                                            selectedCODE = optionsCODE[index];
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                             "CODE",
                             Color.fromRGBO(89, 96, 91, 1),
                             screenFontSize >= 480
@@ -314,10 +503,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 8,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
-                            "4",
+                                : screenHeight / 28, () {
+                          _changeButtonBLKColor(
+                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
                             Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
+                          );
+                        },
+                            "4",
+                            BLKbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -329,10 +525,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 8,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
-                            "4",
+                                : screenHeight / 28, () {
+                          _changeButtonLVLColor(
+                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
                             Color.fromRGBO(146, 136, 125, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
+                          );
+                        },
+                            "4",
+                            LVLbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -346,7 +549,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            "A",
+                            selectedSTRC,
+                            // '${selectedSTRC != null ? selectedSTRC : "ไม่มี"}',
                             Color.fromRGBO(176, 34, 42, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -361,7 +565,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            "3",
+                            selectedLOCT,
                             Color.fromRGBO(249, 152, 36, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -376,7 +580,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            "F",
+                            selectedDAMG,
                             Color.fromRGBO(55, 167, 93, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -391,7 +595,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            "D",
+                            selectedCODE,
                             Color.fromRGBO(89, 96, 91, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -413,10 +617,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 8,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
-                            "3",
+                                : screenHeight / 28, () {
+                          _changeButtonBLKColor(
+                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
                             Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(187, 189, 188, 1),
+                          );
+                        },
+                            "3",
+                            BLKbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -428,10 +639,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenWidth / 8,
                             screenHeight >= 1000
                                 ? screenHeight / 22
-                                : screenHeight / 28,
-                            () {},
-                            "3",
+                                : screenHeight / 28, () {
+                          _changeButtonLVLColor(
+                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
                             Color.fromRGBO(146, 136, 125, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(204, 191, 178, 1),
+                          );
+                        },
+                            "3",
+                            LVLbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -540,10 +758,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "2",
+                                        : screenHeight / 28, () {
+                                  _changeButtonBLKColor(
+                                    Color.fromRGBO(187, 189, 188, 1),
                                     Color.fromRGBO(89, 96, 91, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                  );
+                                },
+                                    "2",
+                                    BLKbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -555,10 +780,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "2",
+                                        : screenHeight / 28, () {
+                                  _changeButtonLVLColor(
+                                    Color.fromRGBO(204, 191, 178, 1),
                                     Color.fromRGBO(146, 136, 125, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                  );
+                                },
+                                    "2",
+                                    LVLbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -570,10 +802,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(3, 98, 166, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
                                     "7",
-                                    Color.fromRGBO(3, 98, 166, 1),
+                                    Numbtn7,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -585,10 +828,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "8",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
                                     Color.fromRGBO(249, 152, 36, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "8",
+                                    Numbtn8,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -600,10 +854,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "9",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(3, 98, 166, 1),
+                                  );
+                                },
+                                    "9",
+                                    Numbtn9,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -625,10 +890,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "1",
+                                        : screenHeight / 28, () {
+                                  _changeButtonBLKColor(
                                     Color.fromRGBO(89, 96, 91, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                  );
+                                },
+                                    "1",
+                                    BLKbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -640,10 +912,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "1",
+                                        : screenHeight / 28, () {
+                                  _changeButtonLVLColor(
                                     Color.fromRGBO(146, 136, 125, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                  );
+                                },
+                                    "1",
+                                    LVLbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -655,10 +934,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(4, 192, 240, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
                                     "4",
-                                    Color.fromRGBO(4, 192, 240, 1),
+                                    Numbtn4,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -670,10 +960,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "5",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
                                     Color.fromRGBO(218, 24, 116, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "5",
+                                    Numbtn5,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -685,10 +986,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "6",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
                                     Color.fromRGBO(4, 192, 240, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "6",
+                                    Numbtn6,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -710,10 +1022,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "T",
+                                        : screenHeight / 28, () {
+                                  _changeButtonBLKColor(
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(187, 189, 188, 1),
                                     Color.fromRGBO(89, 96, 91, 1),
+                                  );
+                                },
+                                    "T",
+                                    BLKbtnAdd,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -725,10 +1044,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 8,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "T",
+                                        : screenHeight / 28, () {
+                                  _changeButtonLVLColor(
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(204, 191, 178, 1),
                                     Color.fromRGBO(146, 136, 125, 1),
+                                  );
+                                },
+                                    "T",
+                                    LVLbtnAdd,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.023,
@@ -740,10 +1066,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "1",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
                                     Color.fromRGBO(3, 98, 166, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "1",
+                                    Numbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -755,10 +1092,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "2",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
                                     Color.fromRGBO(249, 152, 36, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "2",
+                                    Numbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,
@@ -770,10 +1118,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         : screenWidth / 7,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
-                                        : screenHeight / 28,
-                                    () {},
-                                    "3",
+                                        : screenHeight / 28, () {
+                                  _changeButtonNumColor(
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(3, 98, 166, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(255, 216, 234, 1),
+                                    Color.fromRGBO(224, 242, 246, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                    Color.fromRGBO(245, 230, 211, 1),
+                                    Color.fromRGBO(218, 234, 246, 1),
+                                  );
+                                },
+                                    "3",
+                                    Numbtn3,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
                                         : screenFontSize * 0.03,

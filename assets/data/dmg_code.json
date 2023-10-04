@@ -3,12 +3,12 @@
     "damge": "A",
     "code": [
       {
-        "id": "F",
+        "id": "D",
         "description": "Minimal damage"
       },
       {
-        "id": "D",
-        "description": "Middle damgeeee"
+        "id": "A",
+        "description": "Middle damageeee"
       }
     ]
   },

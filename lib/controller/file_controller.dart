@@ -63,7 +63,7 @@ class FileController extends ChangeNotifier {
       List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
       jobs.removeWhere((j) => j.itemName == job.itemName);
       jobs.add(job);
-      await FileManager().writeJob(jobs as Map<String, dynamic>);
+      await FileManager().writeData(jobs as Map<String, dynamic>);
       _job = jobs;
     }
 

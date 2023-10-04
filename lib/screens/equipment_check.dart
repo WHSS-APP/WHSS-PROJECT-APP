@@ -9,6 +9,7 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
+import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/model/job.dart';
 import 'package:project_whss_app/model/dmg.dart';
 import 'package:project_whss_app/model/location.dart';
@@ -26,7 +27,8 @@ class EquipmentCheck extends StatefulWidget {
 class _EquipmentCheckState extends State<EquipmentCheck> {
   File? _selectedImage;
   String? _itemName;
-  late List<DamgeAsset> damgeCode = context.read<FileController>().damage;
+  String? _filePath;
+  late List<DamgeAsset> damageCode = context.read<FileController>().damage;
   late List<LocationAsset> strcLoctCode =
       context.read<FileController>().strcLoct;
 
@@ -163,6 +165,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
 
       setState(() {
+        _filePath = newImagePath;
         _selectedImage = File(newImagePath);
         _itemName = 'K$formattedDate';
       });
@@ -173,13 +176,50 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   String selectedLOCT = '';
   String selectedDAMG = '';
   String selectedCODE = '';
-  final List<String> optionsSTRC = ['A', 'B', 'C', 'D'];
-  final List<String> optionsLOCT = ['1', '2', '3', '4'];
-  final List<String> optionsDAMG = ['F', 'U', 'B'];
-  final List<String> optionsCODE = ['D', 'A', 'N', 'C'];
+
+  List<String> optionsSTRC = [];
+  List<String> optionsLOCT = [];
+  List<String> optionsDAMG = [];
+  List<String> optionsCODE = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+    // map all strcLoctCode only Loct
+
+    // select only strc = 'B'
+    optionsLOCT = strcLoctCode.where((e) => e.strc == 'B').map((e) => e.loct!).expand((x) => x).toList();
+
+
+    // optionsLOCT = strcLoctCode.map((e) => e.loct!).toList();
+    optionsDAMG = damageCode.map((e) => e.damge!).toList();
+
+    // select only damage = 'F' and show id code
+    optionsCODE = damageCode
+      .where((e) => e.damge == 'A')
+      .map((e) => e.code!)
+      .toList()
+      .expand((x) => x)
+      .map((e) => e.id!)
+      .toList();
+
+    // optionsCODE = damageCode.map((e) => e.code!).toList();
+  }
+  
+
+  // final List<String> optionsLOCT = ['1', '2', '3', '4'];
+  // final List<String> optionsDAMG = ['F', 'U', 'B'];
+  // final List<String> optionsCODE = ['D', 'A', 'N', 'C'];
 
   @override
   Widget build(BuildContext context) {
+    context.read<FileController>().readStrLoct();
+    context.read<FileController>().readDmg();
+
+    print(optionsSTRC);
+
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -189,6 +229,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     print(
         "---------------------------screenHeight-----------------------------");
     print(screenHeight);
+    print(optionsSTRC.length);
 
     return Scaffold(
       appBar: AppBar(
@@ -1144,22 +1185,56 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         ),
                         SizedBox(height: screenHeight * 0.001),
                         Column(
-                          children: [
+                            children: [
                             _buildButton(
-                                screenWidth >= 480
-                                    ? screenWidth / 7
-                                    : screenWidth / 7,
-                                screenHeight >= 1000
-                                    ? screenHeight / 6.6
-                                    : screenHeight / 6,
-                                () {},
-                                "SAVE",
-                                Color.fromRGBO(249, 152, 36, 1),
-                                screenFontSize >= 480
-                                    ? screenFontSize * 0.025
-                                    : screenFontSize * 0.024,
-                                Colors.white),
-                          ],
+                              screenWidth >= 480
+                                ? screenWidth / 7
+                                : screenWidth / 7,
+                              screenHeight >= 1000
+                                ? screenHeight / 6.6
+                                : screenHeight / 6,
+                              () async {
+                                // Add your onPressed function here
+                                // Map<String, dynamic> newData = {
+                                //   "itemName" : _itemName ?? "",
+                                //   "location" : {"strc": selectedSTRC ?? '', "loct": selectedLOCT ?? ''},
+                                //   "damage" : {
+                                //     "damage" : selectedDAMG ?? '',
+                                //     "code" : selectedCODE ?? '',
+                                //     "description" : "", // selectDesscriptionFrom DMG Code
+                                //   },
+                                //   "level" : "", // LVL
+                                //   "block" : "", //BLOCK
+                                //   "direction" : "",
+                                //   "status" : "", // สถานะ
+                                //   "picturePath" : _filePath ?? "",
+                                // };
+
+                                Map<String, dynamic> newData  = {
+                                  "itemName" : "HELLO",
+                                  "location" : {"strc": '1', "loct":  '2'},
+                                  "damage" : {
+                                    "damge" : 'G',
+                                    "code" : 'E',
+                                    "description" : "F", // selectDesscriptionFrom DMG Code
+                                  },
+                                  "level" : "1", // LVL
+                                  "block" : "B", //BLOCK
+                                  "direction" : "4",
+                                  "status" : "Repair", // สถานะ
+                                  "picturePath" : "/new_img",
+                                };
+              
+                                FileManager fileManager = FileManager();
+                                await fileManager.writeData(newData);
+                              },
+                              "SAVE",
+                              Color.fromRGBO(249, 152, 36, 1),
+                              screenFontSize >= 480
+                                ? screenFontSize * 0.025
+                                : screenFontSize * 0.024,
+                              Colors.white),
+                            ],
                         )
                       ],
                     ),

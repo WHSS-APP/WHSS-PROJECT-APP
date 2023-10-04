@@ -114,7 +114,7 @@ class FileManager {
   }
 
   // write file Job to tempData.json
-  Future<void> writeJob(Map<String, dynamic> newData) async {
+  Future<void> writeData(Map<String, dynamic> newData) async {
     File file = await _readJobs;
     // no file create new file
     if (!await file.exists()) {
@@ -123,6 +123,10 @@ class FileManager {
     }
 
     String fileContent = await file.readAsString();
+
+    if (fileContent.isEmpty) {
+      fileContent = '[]';
+    }
 
     List<Map<String, dynamic>> jsonList =
         List<Map<String, dynamic>>.from(json.decode(fileContent));

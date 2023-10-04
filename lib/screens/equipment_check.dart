@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, sized_box_for_whitespace
 
 import 'dart:io';
 import 'dart:convert';
@@ -31,11 +31,13 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   late List<DamgeAsset> damageCode = context.read<FileController>().damage;
   late List<LocationAsset> strcLoctCode =
       context.read<FileController>().strcLoct;
+  TextEditingController _BlkEditingController = TextEditingController();
+  TextEditingController _LvlEditingController = TextEditingController();
 
   Widget _buildButton(double width, double height, VoidCallback onPressed,
       String label, Color backgroundColor, double fontsize, Color fontColor) {
     return Container(
-      width: width, // กำหนดความกว้างของ Container ที่คุณต้องการ
+      width: width,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -50,6 +52,108 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
               color: fontColor),
         ),
       ),
+    );
+  }
+
+  void refreshButtonPressed() {
+    setState(() {
+      buttonWarning = Color.fromRGBO(176, 34, 42, 1);
+      buttonRepair = Color.fromRGBO(214, 129, 29, 1);
+      buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
+      buttonChange = Color.fromRGBO(89, 96, 91, 1);
+
+      //Clear BLK
+      BLKbtn1 = Color.fromRGBO(89, 96, 91, 1);
+      BLKbtn2 = Color.fromRGBO(89, 96, 91, 1);
+      BLKbtn3 = Color.fromRGBO(89, 96, 91, 1);
+      BLKbtn4 = Color.fromRGBO(89, 96, 91, 1);
+      BLKbtnAdd = Color.fromRGBO(89, 96, 91, 1);
+
+      //Clear LVL
+      LVLbtn1 = Color.fromRGBO(146, 136, 125, 1);
+      LVLbtn2 = Color.fromRGBO(146, 136, 125, 1);
+      LVLbtn3 = Color.fromRGBO(146, 136, 125, 1);
+      LVLbtn4 = Color.fromRGBO(146, 136, 125, 1);
+      LVLbtnAdd = Color.fromRGBO(146, 136, 125, 1);
+
+      //Clear Num
+      Numbtn1 = Color.fromRGBO(3, 98, 166, 1);
+      Numbtn2 = Color.fromRGBO(249, 152, 36, 1);
+      Numbtn3 = Color.fromRGBO(3, 98, 166, 1);
+      Numbtn4 = Color.fromRGBO(4, 192, 240, 1);
+      Numbtn5 = Color.fromRGBO(218, 24, 116, 1);
+      Numbtn6 = Color.fromRGBO(4, 192, 240, 1);
+      Numbtn7 = Color.fromRGBO(3, 98, 166, 1);
+      Numbtn8 = Color.fromRGBO(249, 152, 36, 1);
+      Numbtn9 = Color.fromRGBO(3, 98, 166, 1);
+
+      //set variable
+      _selectedImage = null;
+      _BlkEditingController.clear();
+      _LvlEditingController.clear();
+      selectBLK = '';
+      selectLVL = '';
+      selectDirection = '';
+      selectWarning = '';
+      selectRepair = '';
+      selectSupplement = '';
+      selectChange = '';
+      checkSTRC = '';
+      checkLOCT = '';
+      checkDAMG = '';
+      checkCODE = '';
+    });
+  }
+
+  void showSaveConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[200],
+          title: Text(
+            "บันทึก",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+            ),
+          ),
+          content: Text("ต้องการบันทึกข้อมูลหรือไม่?"),
+          actions: [
+            TextButton(
+              child: Text("ยกเลิก"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("ตกลง"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                showSaveSuccessDialog(context);
+                refreshButtonPressed();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showSaveSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop();
+        });
+
+        return AlertDialog(
+          title: Text("บันทึกสำเร็จ"),
+          content: Text("ข้อมูลของคุณถูกบันทึกแล้ว"),
+        );
+      },
     );
   }
 
@@ -182,7 +286,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   List<String> optionsDAMG = [];
   List<String> optionsCODE = [];
 
-
+  String selectBLK = '';
+  String selectLVL = '';
+  String selectDirection = '';
+  String selectWarning = '';
+  String selectRepair = '';
+  String selectSupplement = '';
+  String selectChange = '';
+  String checkSTRC = '';
+  String checkLOCT = '';
+  String checkDAMG = '';
+  String checkCODE = '';
   @override
   void initState() {
     super.initState();
@@ -190,24 +304,26 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     // map all strcLoctCode only Loct
 
     // select only strc = 'B'
-    optionsLOCT = strcLoctCode.where((e) => e.strc == 'B').map((e) => e.loct!).expand((x) => x).toList();
-
+    optionsLOCT = strcLoctCode
+        .where((e) => e.strc == 'B')
+        .map((e) => e.loct!)
+        .expand((x) => x)
+        .toList();
 
     // optionsLOCT = strcLoctCode.map((e) => e.loct!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
 
     // select only damage = 'F' and show id code
     optionsCODE = damageCode
-      .where((e) => e.damge == 'A')
-      .map((e) => e.code!)
-      .toList()
-      .expand((x) => x)
-      .map((e) => e.id!)
-      .toList();
+        .where((e) => e.damge == 'A')
+        .map((e) => e.code!)
+        .toList()
+        .expand((x) => x)
+        .map((e) => e.id!)
+        .toList();
 
     // optionsCODE = damageCode.map((e) => e.code!).toList();
   }
-  
 
   // final List<String> optionsLOCT = ['1', '2', '3', '4'];
   // final List<String> optionsDAMG = ['F', 'U', 'B'];
@@ -321,7 +437,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _selectedImage = null;
+                                  refreshButtonPressed();
                                 });
                               },
                             )),
@@ -385,6 +501,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         onTap: () {
                                           setState(() {
                                             selectedSTRC = optionsSTRC[index];
+                                            checkSTRC = selectedSTRC;
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -427,6 +544,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         onTap: () {
                                           setState(() {
                                             selectedLOCT = optionsLOCT[index];
+                                            checkLOCT = selectedLOCT;
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -469,6 +587,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         onTap: () {
                                           setState(() {
                                             selectedDAMG = optionsDAMG[index];
+                                            checkDAMG = selectedDAMG;
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -511,6 +630,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         onTap: () {
                                           setState(() {
                                             selectedCODE = optionsCODE[index];
+                                            checkCODE = selectedCODE;
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -552,8 +672,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(89, 96, 91, 1),
                             Color.fromRGBO(187, 189, 188, 1),
                           );
+                          selectBLK = '4';
                         },
-                            "4",
+                            '4',
                             BLKbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -574,6 +695,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(146, 136, 125, 1),
                             Color.fromRGBO(204, 191, 178, 1),
                           );
+                          selectLVL = '4';
                         },
                             "4",
                             LVLbtn4,
@@ -590,8 +712,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            selectedSTRC,
-                            // '${selectedSTRC != null ? selectedSTRC : "ไม่มี"}',
+                            checkSTRC != '' ? checkSTRC : '',
                             Color.fromRGBO(176, 34, 42, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -606,7 +727,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            selectedLOCT,
+                            checkLOCT != '' ? checkLOCT : '',
                             Color.fromRGBO(249, 152, 36, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -621,7 +742,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            selectedDAMG,
+                            checkDAMG != '' ? checkDAMG : '',
                             Color.fromRGBO(55, 167, 93, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -636,7 +757,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28,
                             () {},
-                            selectedCODE,
+                            checkCODE != '' ? checkCODE : '',
                             Color.fromRGBO(89, 96, 91, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -666,8 +787,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(187, 189, 188, 1),
                             Color.fromRGBO(187, 189, 188, 1),
                           );
+                          selectBLK = '3';
                         },
-                            "3",
+                            '3',
                             BLKbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -688,6 +810,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(204, 191, 178, 1),
                             Color.fromRGBO(204, 191, 178, 1),
                           );
+                          selectLVL = '3';
                         },
                             "3",
                             LVLbtn3,
@@ -709,6 +832,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(168, 217, 184, 1),
                             Color.fromRGBO(167, 171, 168, 1),
                           );
+                          selectWarning = 'เตือน';
                         },
                             "เตือน",
                             buttonWarning,
@@ -730,6 +854,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(168, 217, 184, 1),
                             Color.fromRGBO(167, 171, 168, 1),
                           );
+                          selectRepair = 'ซ่อม';
                         },
                             "ซ่อม",
                             buttonRepair,
@@ -751,6 +876,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(55, 167, 93, 1),
                             Color.fromRGBO(167, 171, 168, 1),
                           );
+                          selectSupplement = 'เสริม';
                         },
                             "เสริม",
                             buttonSupplement,
@@ -772,6 +898,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(168, 217, 184, 1),
                             Color.fromRGBO(89, 96, 91, 1),
                           );
+                          selectChange = 'เปลี่ยน';
                         },
                             "เปลี่ยน",
                             buttonChange,
@@ -807,6 +934,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(187, 189, 188, 1),
                                     Color.fromRGBO(187, 189, 188, 1),
                                   );
+                                  selectBLK = '2';
                                 },
                                     "2",
                                     BLKbtn2,
@@ -829,6 +957,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(204, 191, 178, 1),
                                     Color.fromRGBO(204, 191, 178, 1),
                                   );
+                                  selectLVL = '2';
                                 },
                                     "2",
                                     LVLbtn2,
@@ -855,6 +984,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '7';
                                 },
                                     "7",
                                     Numbtn7,
@@ -881,6 +1011,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(249, 152, 36, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '8';
                                 },
                                     "8",
                                     Numbtn8,
@@ -907,6 +1038,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(3, 98, 166, 1),
                                   );
+                                  selectDirection = '9';
                                 },
                                     "9",
                                     Numbtn9,
@@ -939,6 +1071,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(187, 189, 188, 1),
                                     Color.fromRGBO(187, 189, 188, 1),
                                   );
+                                  selectBLK = '1';
                                 },
                                     "1",
                                     BLKbtn1,
@@ -961,6 +1094,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(204, 191, 178, 1),
                                     Color.fromRGBO(204, 191, 178, 1),
                                   );
+                                  selectLVL = '1';
                                 },
                                     "1",
                                     LVLbtn1,
@@ -987,6 +1121,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '4';
                                 },
                                     "4",
                                     Numbtn4,
@@ -1013,6 +1148,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '5';
                                 },
                                     "5",
                                     Numbtn5,
@@ -1039,6 +1175,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '6';
                                 },
                                     "6",
                                     Numbtn6,
@@ -1057,49 +1194,90 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildButton(
-                                    screenWidth >= 480
-                                        ? screenWidth / 8
-                                        : screenWidth / 8,
-                                    screenHeight >= 1000
-                                        ? screenHeight / 22
-                                        : screenHeight / 28, () {
-                                  _changeButtonBLKColor(
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(89, 96, 91, 1),
-                                  );
-                                },
-                                    "T",
-                                    BLKbtnAdd,
-                                    screenFontSize >= 480
-                                        ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
-                                    Colors.white),
+                                SizedBox(
+                                  width: screenWidth >= 480
+                                      ? screenWidth / 8
+                                      : screenWidth / 8,
+                                  height: screenHeight >= 1000
+                                      ? screenHeight / 22
+                                      : screenHeight / 28,
+                                  child: TextField(
+                                    controller: _BlkEditingController,
+                                    cursorColor: Colors.white,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenFontSize >= 480
+                                          ? screenFontSize * 0.03
+                                          : screenFontSize * 0.03,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      filled: true, // ทำให้มีพื้นหลัง
+                                      fillColor: Color.fromRGBO(89, 96, 91, 1),
+                                      hintText: 'INPUT',
+                                      hintStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 12),
+                                      alignLabelWithHint: true,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectBLK = value;
+                                        _changeButtonBLKColor(
+                                          Color.fromRGBO(187, 189, 188, 1),
+                                          Color.fromRGBO(187, 189, 188, 1),
+                                          Color.fromRGBO(187, 189, 188, 1),
+                                          Color.fromRGBO(187, 189, 188, 1),
+                                          Color.fromRGBO(89, 96, 91, 1),
+                                        );
+                                      });
+                                    },
+                                  ),
+                                ),
                                 SizedBox(width: screenWidth * 0.01),
-                                _buildButton(
-                                    screenWidth >= 480
-                                        ? screenWidth / 8
-                                        : screenWidth / 8,
-                                    screenHeight >= 1000
-                                        ? screenHeight / 22
-                                        : screenHeight / 28, () {
-                                  _changeButtonLVLColor(
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(146, 136, 125, 1),
-                                  );
-                                },
-                                    "T",
-                                    LVLbtnAdd,
-                                    screenFontSize >= 480
-                                        ? screenFontSize * 0.03
-                                        : screenFontSize * 0.023,
-                                    Colors.white),
+                                SizedBox(
+                                  width: screenWidth >= 480
+                                      ? screenWidth / 8
+                                      : screenWidth / 8,
+                                  height: screenHeight >= 1000
+                                      ? screenHeight / 22
+                                      : screenHeight / 28,
+                                  child: TextField(
+                                    controller: _LvlEditingController,
+                                    cursorColor: Colors.white,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenFontSize >= 480
+                                          ? screenFontSize * 0.03
+                                          : screenFontSize * 0.03,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      filled: true,
+                                      fillColor:
+                                          Color.fromRGBO(146, 136, 125, 1),
+                                      hintText: 'INPUT',
+                                      hintStyle: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 12),
+                                      alignLabelWithHint: true,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectLVL = value;
+                                        _changeButtonLVLColor(
+                                          Color.fromRGBO(204, 191, 178, 1),
+                                          Color.fromRGBO(204, 191, 178, 1),
+                                          Color.fromRGBO(204, 191, 178, 1),
+                                          Color.fromRGBO(204, 191, 178, 1),
+                                          Color.fromRGBO(146, 136, 125, 1),
+                                        );
+                                      });
+                                    },
+                                  ),
+                                ),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
@@ -1119,6 +1297,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '1';
                                 },
                                     "1",
                                     Numbtn1,
@@ -1145,6 +1324,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '2';
                                 },
                                     "2",
                                     Numbtn2,
@@ -1171,6 +1351,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(245, 230, 211, 1),
                                     Color.fromRGBO(218, 234, 246, 1),
                                   );
+                                  selectDirection = '3';
                                 },
                                     "3",
                                     Numbtn3,
@@ -1185,56 +1366,67 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         ),
                         SizedBox(height: screenHeight * 0.001),
                         Column(
-                            children: [
+                          children: [
                             _buildButton(
-                              screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
-                              screenHeight >= 1000
-                                ? screenHeight / 6.6
-                                : screenHeight / 6,
-                              () async {
-                                // Add your onPressed function here
-                                // Map<String, dynamic> newData = {
-                                //   "itemName" : _itemName ?? "",
-                                //   "location" : {"strc": selectedSTRC ?? '', "loct": selectedLOCT ?? ''},
-                                //   "damage" : {
-                                //     "damage" : selectedDAMG ?? '',
-                                //     "code" : selectedCODE ?? '',
-                                //     "description" : "", // selectDesscriptionFrom DMG Code
-                                //   },
-                                //   "level" : "", // LVL
-                                //   "block" : "", //BLOCK
-                                //   "direction" : "",
-                                //   "status" : "", // สถานะ
-                                //   "picturePath" : _filePath ?? "",
-                                // };
+                                screenWidth >= 480
+                                    ? screenWidth / 7
+                                    : screenWidth / 7,
+                                screenHeight >= 1000
+                                    ? screenHeight / 6.6
+                                    : screenHeight / 6, () async {
+                              // Add your onPressed function here
+                              // Map<String, dynamic> newData = {
+                              //   "itemName" : _itemName ?? "",
+                              //   "location" : {"strc": selectedSTRC ?? '', "loct": selectedLOCT ?? ''},
+                              //   "damage" : {
+                              //     "damage" : selectedDAMG ?? '',
+                              //     "code" : selectedCODE ?? '',
+                              //     "description" : "", // selectDesscriptionFrom DMG Code
+                              //   },
+                              //   "level" : "", // LVL
+                              //   "block" : "", //BLOCK
+                              //   "direction" : "",
+                              //   "status" : "", // สถานะ
+                              //   "picturePath" : _filePath ?? "",
+                              // };
 
-                                Map<String, dynamic> newData  = {
-                                  "itemName" : "HELLO",
-                                  "location" : {"strc": '1', "loct":  '2'},
-                                  "damage" : {
-                                    "damge" : 'G',
-                                    "code" : 'E',
-                                    "description" : "F", // selectDesscriptionFrom DMG Code
-                                  },
-                                  "level" : "1", // LVL
-                                  "block" : "B", //BLOCK
-                                  "direction" : "4",
-                                  "status" : "Repair", // สถานะ
-                                  "picturePath" : "/new_img",
-                                };
-              
-                                FileManager fileManager = FileManager();
-                                await fileManager.writeData(newData);
-                              },
-                              "SAVE",
-                              Color.fromRGBO(249, 152, 36, 1),
-                              screenFontSize >= 480
-                                ? screenFontSize * 0.025
-                                : screenFontSize * 0.024,
-                              Colors.white),
-                            ],
+                              Map<String, dynamic> newData = {
+                                "itemName": "HELLO TEST",
+                                "location": {
+                                  "strc": checkSTRC,
+                                  "loct": checkLOCT
+                                },
+                                "damage": {
+                                  "damge": checkDAMG,
+                                  "code": checkCODE,
+                                  "description":
+                                      "F", // selectDesscriptionFrom DMG Code
+                                },
+                                "level": selectLVL, // LVL
+                                "block": selectBLK, //BLOCK
+                                "direction": selectDirection,
+                                "status": selectWarning != ''
+                                    ? selectWarning
+                                    : selectRepair != ''
+                                        ? selectRepair
+                                        : selectSupplement != ''
+                                            ? selectSupplement
+                                            : selectChange != ''
+                                                ? selectChange
+                                                : '',
+                                "picturePath": "/new_img",
+                              };
+                              FileManager fileManager = FileManager();
+                              await fileManager.writeData(newData);
+                              showSaveConfirmationDialog(context);
+                            },
+                                "SAVE",
+                                Color.fromRGBO(249, 152, 36, 1),
+                                screenFontSize >= 480
+                                    ? screenFontSize * 0.025
+                                    : screenFontSize * 0.024,
+                                Colors.white),
+                          ],
                         )
                       ],
                     ),

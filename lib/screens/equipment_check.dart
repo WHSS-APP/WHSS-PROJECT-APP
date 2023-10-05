@@ -102,6 +102,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       checkLOCT = '';
       checkDAMG = '';
       checkCODE = '';
+      checkDescription = '';
     });
   }
 
@@ -285,6 +286,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   List<String> optionsLOCT = [];
   List<String> optionsDAMG = [];
   List<String> optionsCODE = [];
+  List<String> optionsDES = [];
 
   String selectBLK = '';
   String selectLVL = '';
@@ -297,37 +299,13 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   String checkLOCT = '';
   String checkDAMG = '';
   String checkCODE = '';
+  String checkDescription = '';
   @override
   void initState() {
     super.initState();
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
-    // map all strcLoctCode only Loct
-
-    // select only strc = 'B'
-    optionsLOCT = strcLoctCode
-        .where((e) => e.strc == 'B')
-        .map((e) => e.loct!)
-        .expand((x) => x)
-        .toList();
-
-    // optionsLOCT = strcLoctCode.map((e) => e.loct!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
-
-    // select only damage = 'F' and show id code
-    optionsCODE = damageCode
-        .where((e) => e.damge == 'A')
-        .map((e) => e.code!)
-        .toList()
-        .expand((x) => x)
-        .map((e) => e.id!)
-        .toList();
-
-    // optionsCODE = damageCode.map((e) => e.code!).toList();
   }
-
-  // final List<String> optionsLOCT = ['1', '2', '3', '4'];
-  // final List<String> optionsDAMG = ['F', 'U', 'B'];
-  // final List<String> optionsCODE = ['D', 'A', 'N', 'C'];
 
   @override
   Widget build(BuildContext context) {
@@ -502,6 +480,12 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                           setState(() {
                                             selectedSTRC = optionsSTRC[index];
                                             checkSTRC = selectedSTRC;
+                                            optionsLOCT = strcLoctCode
+                                                .where(
+                                                    (e) => checkSTRC == e.strc)
+                                                .map((e) => e.loct!)
+                                                .expand((x) => x)
+                                                .toList();
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -588,6 +572,22 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                           setState(() {
                                             selectedDAMG = optionsDAMG[index];
                                             checkDAMG = selectedDAMG;
+                                            optionsCODE = damageCode
+                                                .where((e) =>
+                                                    selectedDAMG == e.damge)
+                                                .map((e) => e.code!)
+                                                .toList()
+                                                .expand((x) => x)
+                                                .map((e) => e.id!)
+                                                .toList();
+                                            optionsDES = damageCode
+                                                .where((e) =>
+                                                    selectedDAMG == e.damge)
+                                                .map((e) => e.code!)
+                                                .toList()
+                                                .expand((x) => x)
+                                                .map((e) => e.description!)
+                                                .toList();
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -631,6 +631,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                           setState(() {
                                             selectedCODE = optionsCODE[index];
                                             checkCODE = selectedCODE;
+                                            checkDescription =
+                                                optionsDES[index];
                                           });
                                           Navigator.of(context).pop();
                                         },
@@ -1374,22 +1376,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 screenHeight >= 1000
                                     ? screenHeight / 6.6
                                     : screenHeight / 6, () async {
-                              // Add your onPressed function here
-                              // Map<String, dynamic> newData = {
-                              //   "itemName" : _itemName ?? "",
-                              //   "location" : {"strc": selectedSTRC ?? '', "loct": selectedLOCT ?? ''},
-                              //   "damage" : {
-                              //     "damage" : selectedDAMG ?? '',
-                              //     "code" : selectedCODE ?? '',
-                              //     "description" : "", // selectDesscriptionFrom DMG Code
-                              //   },
-                              //   "level" : "", // LVL
-                              //   "block" : "", //BLOCK
-                              //   "direction" : "",
-                              //   "status" : "", // สถานะ
-                              //   "picturePath" : _filePath ?? "",
-                              // };
-
                               Map<String, dynamic> newData = {
                                 "itemName": _itemName,
                                 "location": {
@@ -1400,7 +1386,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                   "damge": checkDAMG,
                                   "code": checkCODE,
                                   "description":
-                                      "F", // selectDesscriptionFrom DMG Code
+                                      checkDescription, // selectDesscriptionFrom DMG Code
                                 },
                                 "level": selectLVL, // LVL
                                 "block": selectBLK, //BLOCK

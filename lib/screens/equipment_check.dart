@@ -1391,7 +1391,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               // };
 
                               Map<String, dynamic> newData = {
-                                "itemName": "HELLO TEST",
+                                "itemName": _itemName,
                                 "location": {
                                   "strc": checkSTRC,
                                   "loct": checkLOCT
@@ -1414,7 +1414,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                             : selectChange != ''
                                                 ? selectChange
                                                 : '',
-                                "picturePath": "/new_img",
+                                "picturePath": _filePath ?? "",
                               };
                               FileManager fileManager = FileManager();
                               await fileManager.writeData(newData);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/model/job.dart';
@@ -122,11 +124,23 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                           children: [
                             Column(
                               children: [
-                                Image.network(
-                                  'https://picsum.photos/250?image=9',
-                                  width: 130,
-                                  height: 130,
-                                )
+                                // call file from data.pathPicture
+                                data.picturePath != ''
+                                    ? Image.file(
+                                        File(data.picturePath),
+                                        width: 130,
+                                        height: 130,
+                                      )
+                                    : Container(
+                                        width: 130,
+                                        height: 130,
+                                        color: Colors.grey,
+                                        child: Icon(
+                                          Icons.image,
+                                          color: Colors.white,
+                                          size: 50,
+                                        ),
+                                      ),
                               ],
                             ),
                             SizedBox(

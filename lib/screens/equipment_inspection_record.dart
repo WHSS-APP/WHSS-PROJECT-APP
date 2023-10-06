@@ -318,7 +318,8 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  data.damage.description,
+                                                  data.damage.damge +
+                                                      data.damage.code,
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                   ),

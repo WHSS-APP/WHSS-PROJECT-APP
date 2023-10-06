@@ -307,7 +307,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     super.initState();
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
-    
+
     String? recordSTRC = widget.strcValue;
     checkSTRC = recordSTRC ?? '';
   }
@@ -1375,8 +1375,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 screenHeight >= 1000
                                     ? screenHeight / 6.6
                                     : screenHeight / 6, () async {
+                              DateTime now = DateTime.now();
+                              String formattedDate =
+                                  DateFormat('yyyyMMddHHmmss').format(now);
                               Map<String, dynamic> newData = {
-                                "itemName": _itemName,
+                                "itemName": _itemName ?? "K$formattedDate",
                                 "location": {
                                   "strc": checkSTRC,
                                   "loct": checkLOCT

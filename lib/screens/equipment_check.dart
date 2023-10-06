@@ -630,6 +630,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                             checkCODE = selectedCODE;
                                             checkDescription =
                                                 optionsDES[index];
+
                                           });
                                           Navigator.of(context).pop();
                                         },

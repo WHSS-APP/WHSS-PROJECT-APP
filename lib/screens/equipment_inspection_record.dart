@@ -127,217 +127,235 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  // call file from data.pathPicture
-                                  data.picturePath != ''
-                                      ? Image.file(
-                                          File(data.picturePath),
-                                          width: 130,
-                                          height: 130,
-                                        )
-                                      : Container(
-                                          width: 130,
-                                          height: 130,
-                                          color: Colors.grey,
-                                          child: Icon(
-                                            Icons.image,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
-                                        ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: Color.fromRGBO(21, 29, 40, 1),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    width:
-                                        MediaQuery.of(context).size.width - 180,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "ภาพที่",
-                                            style: TextStyle(
-                                              color: Color.fromRGBO(
-                                                  255, 153, 0, 1),
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            data.itemName,
-                                            style: TextStyle(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EquipmentCheck(
+                                    strcValue: data.location.strc,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  children: [
+                                    // call file from data.pathPicture
+                                    data.picturePath != ''
+                                        ? Image.file(
+                                            File(data.picturePath),
+                                            width: 130,
+                                            height: 130,
+                                          )
+                                        : Container(
+                                            width: 130,
+                                            height: 130,
+                                            color: Colors.grey,
+                                            child: Icon(
+                                              Icons.image,
                                               color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                              size: 50,
                                             ),
                                           ),
-                                        ],
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(21, 29, 40, 1),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      width: MediaQuery.of(context).size.width -
+                                          180,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "ภาพที่",
+                                              style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    255, 153, 0, 1),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              data.itemName,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 180,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromRGBO(21, 29, 40, 1),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "ตำแหน่ง",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                    SizedBox(height: 5),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          180,
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(21, 29, 40, 1),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "ตำแหน่ง",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    data.location.strc,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      data.location.strc,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    data.location.loct,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
+                                                    Text(
+                                                      data.location.loct,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "ชั้นที่",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                                  ],
                                                 ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    data.level,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "ชั้นที่",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  Text(
-                                                    " ",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    "(BLK",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    data.block,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    ",DRT",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    data.direction,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    ")",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "ความเสียหาย",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              ),
-                                              Text(
-                                                data.damage.description,
-                                                style: TextStyle(
-                                                  color: Colors.white,
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      data.level,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      " ",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "(BLK",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data.block,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ",DRT",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data.direction,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ")",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "การแก้ไข",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "ความเสียหาย",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                // ignore: prefer_if_null_operators, unnecessary_null_comparison
-                                                data.status != null
-                                                    ? data.status
-                                                    : "-",
-                                                style: TextStyle(
-                                                  color: Colors.white,
+                                                Text(
+                                                  data.damage.description,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "การแก้ไข",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  // ignore: prefer_if_null_operators, unnecessary_null_comparison
+                                                  data.status != null
+                                                      ? data.status
+                                                      : "-",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

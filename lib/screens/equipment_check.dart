@@ -18,7 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class EquipmentCheck extends StatefulWidget {
-  const EquipmentCheck({Key? key});
+  final String? strcValue;
+  EquipmentCheck({Key? key, this.strcValue}) : super(key: key);
 
   @override
   State<EquipmentCheck> createState() => _EquipmentCheckState();
@@ -300,6 +301,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   String checkDAMG = '';
   String checkCODE = '';
   String checkDescription = '';
+
   @override
   void initState() {
     super.initState();
@@ -309,21 +311,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
   @override
   Widget build(BuildContext context) {
+    //For Edit
+    String? recordSTRC = widget.strcValue;
+    String checkSTRC = recordSTRC ?? '';
+    print(checkSTRC);
     context.read<FileController>().readStrLoct();
     context.read<FileController>().readDmg();
-
-    print(optionsSTRC);
 
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print(
-        "---------------------------screenWidth-----------------------------");
-    print(screenWidth);
-    print(
-        "---------------------------screenHeight-----------------------------");
-    print(screenHeight);
-    print(optionsSTRC.length);
 
     return Scaffold(
       appBar: AppBar(

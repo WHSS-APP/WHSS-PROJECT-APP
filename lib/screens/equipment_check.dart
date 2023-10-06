@@ -28,7 +28,7 @@ class EquipmentCheck extends StatefulWidget {
   final String? levelValue;
   final String? directionValue;
   final String? statusValue;
-  final File? picturePathValue;
+  final String? picturePathValue;
   EquipmentCheck({
     Key? key,
     this.strcValue,
@@ -274,6 +274,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         await ImagePicker().pickImage(source: ImageSource.camera);
     print("returnedImage");
     print(returnedImage);
+
     if (returnedImage == null) return;
 
     DateTime now = DateTime.now();
@@ -291,16 +292,33 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         imagesDir.createSync(recursive: true);
       }
 
-      final newImagePath = '${imagesDir.path}/K$formattedDate.png';
-      final resizedImage =
-          img.copyResize(originalImage, width: 400, height: 400);
-      File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+      if (_itemName != '' && _itemName != null) {
+        final newImagePath = '${imagesDir.path}/$_itemName.png';
+        // img.decodeImage(File(newImagePath).readAsBytesSync());
+        if (File(newImagePath).existsSync()) {
+          File(newImagePath).deleteSync();
+        }
+        final resizedImage =
+            img.copyResize(originalImage, width: 400, height: 400);
+        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
 
-      setState(() {
-        _filePath = newImagePath;
-        _selectedImage = File(newImagePath);
-        _itemName = 'K$formattedDate';
-      });
+        setState(() {
+          _filePath = newImagePath;
+          _selectedImage = File(newImagePath);
+        });
+      } else {
+        final newImagePath = '${imagesDir.path}/K$formattedDate.png';
+
+        final resizedImage =
+            img.copyResize(originalImage, width: 400, height: 400);
+        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+
+        setState(() {
+          _filePath = newImagePath;
+          _selectedImage = File(newImagePath);
+          _itemName = 'K$formattedDate';
+        });
+      }
     }
   }
 
@@ -334,15 +352,32 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
 
-    String? recordSTRC = widget.strcValue;
-    checkSTRC = recordSTRC ?? '';
+    _itemName = widget.keyValue ?? '';
+    checkSTRC = widget.strcValue ?? '';
+    checkLOCT = widget.loctValue ?? '';
+    checkDAMG = widget.damgValue ?? '';
+    checkCODE = widget.codeValue ?? '';
+    checkDescription = widget.descriptionValue ?? '';
+    selectBLK = widget.blockValue ?? '';
+
+    selectLVL = widget.levelValue ?? '';
+    selectDirection = widget.directionValue ?? '';
+    selectWarning = widget.statusValue ?? '';
+    selectRepair = widget.statusValue ?? '';
+    selectSupplement = widget.statusValue ?? '';
+    selectChange = widget.statusValue ?? '';
+    _filePath = widget.picturePathValue ?? '';
+
+    _filePath != '' && _filePath != null
+        ? _selectedImage = File(_filePath!)
+        : _selectedImage = null;
   }
 
   @override
   Widget build(BuildContext context) {
-    //For Edit
+    String keyValue = widget.keyValue ?? '';
 
-    print(checkSTRC);
+    print(_itemName);
     context.read<FileController>().readStrLoct();
     context.read<FileController>().readDmg();
 
@@ -1405,7 +1440,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               String formattedDate =
                                   DateFormat('yyyyMMddHHmmss').format(now);
                               Map<String, dynamic> newData = {
-                                "itemName": _itemName ?? "K$formattedDate",
+                                "itemName": _itemName != "" && _itemName != null
+                                    ? _itemName
+                                    : "K$formattedDate",
                                 "location": {
                                   "strc": checkSTRC,
                                   "loct": checkLOCT
@@ -1430,8 +1467,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                                 : '',
                                 "picturePath": _filePath ?? "",
                               };
+                              print("save");
+                              print(newData['itemName']);
+
                               FileManager fileManager = FileManager();
-                              await fileManager.writeData(newData);
+                              if (newData['itemName'] == keyValue) {
+                                await fileManager.updateJob(newData);
+                              } else {
+                                await fileManager.writeData(newData);
+                              }
                               showSaveConfirmationDialog(context);
                             },
                                 "SAVE",

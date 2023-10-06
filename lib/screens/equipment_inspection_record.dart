@@ -143,7 +143,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                     levelValue: data.level,
                                     directionValue: data.direction,
                                     statusValue: data.status,
-                                    picturePathValue: File(data.picturePath),
+                                    picturePathValue: data.picturePath,
                                   ),
                                 ),
                               );

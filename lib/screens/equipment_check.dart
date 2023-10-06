@@ -307,13 +307,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     super.initState();
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
+    
+    String? recordSTRC = widget.strcValue;
+    checkSTRC = recordSTRC ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
     //For Edit
-    String? recordSTRC = widget.strcValue;
-    String checkSTRC = recordSTRC ?? '';
+
     print(checkSTRC);
     context.read<FileController>().readStrLoct();
     context.read<FileController>().readDmg();
@@ -630,7 +632,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                             checkCODE = selectedCODE;
                                             checkDescription =
                                                 optionsDES[index];
-
                                           });
                                           Navigator.of(context).pop();
                                         },

@@ -133,7 +133,17 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => EquipmentCheck(
+                                    keyValue: data.itemName,
                                     strcValue: data.location.strc,
+                                    loctValue: data.location.loct,
+                                    damgValue: data.damage.damge,
+                                    codeValue: data.damage.code,
+                                    descriptionValue: data.damage.description,
+                                    blockValue: data.block,
+                                    levelValue: data.level,
+                                    directionValue: data.direction,
+                                    statusValue: data.status,
+                                    picturePathValue: File(data.picturePath),
                                   ),
                                 ),
                               );

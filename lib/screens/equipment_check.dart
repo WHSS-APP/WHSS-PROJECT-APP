@@ -19,7 +19,30 @@ import 'package:intl/intl.dart';
 
 class EquipmentCheck extends StatefulWidget {
   final String? strcValue;
-  EquipmentCheck({Key? key, this.strcValue}) : super(key: key);
+  final String? loctValue;
+  final String? damgValue;
+  final String? codeValue;
+  final String? keyValue;
+  final String? descriptionValue;
+  final String? blockValue;
+  final String? levelValue;
+  final String? directionValue;
+  final String? statusValue;
+  final File? picturePathValue;
+  EquipmentCheck({
+    Key? key,
+    this.strcValue,
+    this.loctValue,
+    this.damgValue,
+    this.codeValue,
+    this.keyValue,
+    this.descriptionValue,
+    this.blockValue,
+    this.levelValue,
+    this.directionValue,
+    this.statusValue,
+    this.picturePathValue,
+  }) : super(key: key);
 
   @override
   State<EquipmentCheck> createState() => _EquipmentCheckState();
@@ -249,7 +272,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   Future _pickImageFromCamera() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.camera);
-
+    print("returnedImage");
+    print(returnedImage);
     if (returnedImage == null) return;
 
     DateTime now = DateTime.now();
@@ -257,6 +281,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
     final originalImage =
         img.decodeImage(File(returnedImage.path).readAsBytesSync());
+    print("originalImage");
+    print(originalImage);
     if (originalImage != null) {
       final appDocumentsDir = await getExternalStorageDirectory();
       final imagesDir = Directory('${appDocumentsDir?.path}/Images');

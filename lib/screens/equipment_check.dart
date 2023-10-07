@@ -159,6 +159,27 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                 FileManager fileManager = FileManager();
                 if (newData['itemName'] == keyValue) {
                   await fileManager.updateJob(newData);
+
+                  Map<String, dynamic> recheckData = {
+                    "itemName": widget.keyValue,
+                    "location": {
+                      "strc": widget.strcValue,
+                      "loct": widget.loctValue
+                    },
+                    "damage": {
+                      "damge": widget.damgValue,
+                      "code": widget.codeValue,
+                      "description": widget
+                          .descriptionValue, // selectDesscriptionFrom DMG Code
+                    },
+                    "level": widget.levelValue, // LVL
+                    "block": widget.blockValue, //BLOCK
+                    "direction": widget.directionValue,
+                    "status": widget.statusValue,
+                    "picturePath": widget.picturePathValue,
+                  };
+
+                  await fileManager.recheckJob(recheckData);
                 } else {
                   await fileManager.writeData(newData);
                 }
@@ -299,20 +320,49 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     if (originalImage != null) {
       final appDocumentsDir = await getExternalStorageDirectory();
       final imagesDir = Directory('${appDocumentsDir?.path}/Images');
+      final updateImageDir = Directory('${appDocumentsDir?.path}/recheckImage');
 
       if (!imagesDir.existsSync()) {
         imagesDir.createSync(recursive: true);
       }
 
+      if (!updateImageDir.existsSync()) {
+        updateImageDir.createSync(recursive: true);
+      }
+
+      // // relocation image
+      // if (_filePath != '' && _filePath != null) {
+      //   final appDocumentsDir = await getExternalStorageDirectory();
+      //   final imagesDir = Directory('${appDocumentsDir?.path}/ImagesRecheck');
+      //   if (!imagesDir.existsSync()) {
+      //     imagesDir.createSync(recursive: true);
+      //   }
+      //   final newImagePath = '${imagesDir.path}/$keyValue.png';
+      //   if (File(newImagePath).existsSync()) {
+      //     File(newImagePath).deleteSync();
+      //   }
+      //   File(_filePath!).renameSync(newImagePath);
+      // }
+
       if (_itemName != '' && _itemName != null) {
         final newImagePath = '${imagesDir.path}/$_itemName.png';
-        // img.decodeImage(File(newImagePath).readAsBytesSync());
+
+        final moveImagePath = '${updateImageDir.path}/$_itemName.png';
+
         if (File(newImagePath).existsSync()) {
-          File(newImagePath).deleteSync();
+          // moveFile newImagePath to recheckImage
+          File(newImagePath).renameSync(moveImagePath);
         }
-        final resizedImage =
-            img.copyResize(originalImage, width: 400, height: 400);
+        final resizedImage = img.copyResize(
+          originalImage,
+          width: 400,
+          height: 400,
+        );
+
+        // moveFile of newImagePath to recheckImage
+
         File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+        // File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
 
         setState(() {
           _filePath = newImagePath;

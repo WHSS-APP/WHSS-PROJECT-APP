@@ -272,8 +272,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   Future _pickImageFromCamera() async {
     final returnedImage =
         await ImagePicker().pickImage(source: ImageSource.camera);
-    print("returnedImage");
-    print(returnedImage);
 
     if (returnedImage == null) return;
 
@@ -282,8 +280,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
     final originalImage =
         img.decodeImage(File(returnedImage.path).readAsBytesSync());
-    print("originalImage");
-    print(originalImage);
     if (originalImage != null) {
       final appDocumentsDir = await getExternalStorageDirectory();
       final imagesDir = Directory('${appDocumentsDir?.path}/Images');
@@ -335,6 +331,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
   String selectBLK = '';
   String selectLVL = '';
+  String LVL = '';
+  String BLK = '';
   String selectDirection = '';
   String selectWarning = '';
   String selectRepair = '';
@@ -359,7 +357,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     checkCODE = widget.codeValue ?? '';
     checkDescription = widget.descriptionValue ?? '';
     selectBLK = widget.blockValue ?? '';
-
     selectLVL = widget.levelValue ?? '';
     selectDirection = widget.directionValue ?? '';
     selectWarning = widget.statusValue ?? '';
@@ -368,15 +365,260 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     selectChange = widget.statusValue ?? '';
     _filePath = widget.picturePathValue ?? '';
 
-    _filePath != '' && _filePath != null
-        ? _selectedImage = File(_filePath!)
-        : _selectedImage = null;
+    // _filePath != '' && _filePath != null
+    //     ? _selectedImage = File(_filePath!)
+    //     : _selectedImage = null;
+
+    if (_filePath != '' && _filePath != null) {
+      _selectedImage = File(_filePath!);
+    }
+
+    //Change Direction
+    if (int.tryParse(selectDirection) != null) {
+      int valueDirection = int.parse(selectDirection);
+      if (valueDirection == 1) {
+        _changeButtonNumColor(
+          Color.fromRGBO(3, 98, 166, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 2) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(249, 152, 36, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 3) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(3, 98, 166, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 4) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(4, 192, 240, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 5) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 24, 116, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 6) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(4, 192, 240, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 7) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(3, 98, 166, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 8) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(249, 152, 36, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+        );
+      } else if (valueDirection == 9) {
+        _changeButtonNumColor(
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(255, 216, 234, 1),
+          Color.fromRGBO(224, 242, 246, 1),
+          Color.fromRGBO(218, 234, 246, 1),
+          Color.fromRGBO(245, 230, 211, 1),
+          Color.fromRGBO(3, 98, 166, 1),
+        );
+      }
+    }
+
+    //Change LVL
+    if (int.tryParse(selectLVL) != null) {
+      int valueLVL = int.parse(selectLVL);
+      if (valueLVL > 4) {
+        LVL = valueLVL.toString();
+        _LvlEditingController.text = LVL;
+        _changeButtonLVLColor(
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(146, 136, 125, 1),
+        );
+      }
+      if (valueLVL == 1) {
+        _changeButtonLVLColor(
+          Color.fromRGBO(146, 136, 125, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+        );
+      } else if (valueLVL == 2) {
+        _changeButtonLVLColor(
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(146, 136, 125, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+        );
+      } else if (valueLVL == 3) {
+        _changeButtonLVLColor(
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(146, 136, 125, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+        );
+      } else if (valueLVL == 4) {
+        _changeButtonLVLColor(
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(146, 136, 125, 1),
+          Color.fromRGBO(204, 191, 178, 1),
+        );
+      }
+    }
+    //Change BLK
+    if (int.tryParse(selectBLK) != null) {
+      int valueBLK = int.parse(selectBLK);
+      if (valueBLK > 4) {
+        BLK = valueBLK.toString();
+        _BlkEditingController.text = BLK;
+        _changeButtonBLKColor(
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(89, 96, 91, 1),
+        );
+      }
+      if (valueBLK == 1) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(89, 96, 91, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+        );
+      } else if (valueBLK == 2) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(89, 96, 91, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+        );
+      } else if (valueBLK == 3) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(89, 96, 91, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+        );
+      } else if (valueBLK == 4) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(89, 96, 91, 1),
+          Color.fromRGBO(187, 189, 188, 1),
+        );
+      }
+    }
+    selectWarning == 'เตือน'
+        ? (_changeButtonColor(
+            Color.fromRGBO(176, 34, 42, 1),
+            Color.fromRGBO(221, 200, 177, 1),
+            Color.fromRGBO(168, 217, 184, 1),
+            Color.fromRGBO(167, 171, 168, 1),
+          ))
+        : buttonWarning;
+    selectRepair == 'ซ่อม'
+        ? (_changeButtonColor(
+            Color.fromRGBO(238, 167, 171, 1),
+            Color.fromRGBO(214, 129, 29, 1),
+            Color.fromRGBO(168, 217, 184, 1),
+            Color.fromRGBO(167, 171, 168, 1),
+          ))
+        : buttonRepair;
+    selectSupplement == 'เสริม'
+        ? (_changeButtonColor(
+            Color.fromRGBO(238, 167, 171, 1),
+            Color.fromRGBO(221, 200, 177, 1),
+            Color.fromRGBO(55, 167, 93, 1),
+            Color.fromRGBO(167, 171, 168, 1),
+          ))
+        : buttonSupplement;
+    selectChange == 'เปลี่ยน'
+        ? (_changeButtonColor(
+            Color.fromRGBO(238, 167, 171, 1),
+            Color.fromRGBO(221, 200, 177, 1),
+            Color.fromRGBO(168, 217, 184, 1),
+            Color.fromRGBO(89, 96, 91, 1)))
+        : buttonChange;
   }
 
   @override
   Widget build(BuildContext context) {
     String keyValue = widget.keyValue ?? '';
-
     print(_itemName);
     context.read<FileController>().readStrLoct();
     context.read<FileController>().readDmg();
@@ -1283,9 +1525,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                           fontSize: 12),
                                       alignLabelWithHint: true,
                                     ),
-                                    onChanged: (value) {
+                                    onChanged: (BLK) {
                                       setState(() {
-                                        selectBLK = value;
+                                        selectBLK = BLK;
                                         _changeButtonBLKColor(
                                           Color.fromRGBO(187, 189, 188, 1),
                                           Color.fromRGBO(187, 189, 188, 1),
@@ -1326,9 +1568,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                           fontSize: 12),
                                       alignLabelWithHint: true,
                                     ),
-                                    onChanged: (value) {
+                                    onChanged: (LVL) {
                                       setState(() {
-                                        selectLVL = value;
+                                        selectLVL = LVL;
                                         _changeButtonLVLColor(
                                           Color.fromRGBO(204, 191, 178, 1),
                                           Color.fromRGBO(204, 191, 178, 1),

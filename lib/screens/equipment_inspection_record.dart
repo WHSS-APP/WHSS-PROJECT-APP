@@ -99,7 +99,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                         .contains(query) ||
                                     (item.location.loct.contains(query)) ||
                                     (item.status.contains(query)) ||
-                                    (item.damage.description.contains(query)))
+                                    (item.damage.damge.contains(query)) || (item.damage.code.contains(query)))
                                 .toList();
                           });
                         }),

@@ -73,8 +73,8 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   @override
   Widget build(BuildContext context) {
     requestExternalStoragePermission();
-
     context.read<FileController>().readJobs();
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

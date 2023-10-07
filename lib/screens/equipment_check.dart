@@ -128,6 +128,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       checkDAMG = '';
       checkCODE = '';
       checkDescription = '';
+      _filePath = null;
     });
   }
 
@@ -157,7 +158,39 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
               onPressed: () async {
                 // เพิ่ม async ที่นี่
                 FileManager fileManager = FileManager();
+
                 if (newData['itemName'] == keyValue) {
+                  print(newData['picturePath']);
+
+                  if (newData['picturePath'] == null ||
+                      newData['picturePath'] == '') {
+                    print('delete image');
+
+                    newData['picturePath'] = '';
+                    // delete img in image
+                    final appDocumentsDir = await getExternalStorageDirectory();
+                    final imagesDir =
+                        Directory('${appDocumentsDir?.path}/Images');
+                    final updateImageDir = Directory(
+                        '${appDocumentsDir?.path}/recheckImage'); //recheckImage
+
+                    if (!imagesDir.existsSync()) {
+                      imagesDir.createSync(recursive: true);
+                    }
+
+                    final newImagePath = '${imagesDir.path}/$keyValue.png';
+                    final moveImagePath = '${updateImageDir.path}/$_itemName.png';
+
+                    if (File(newImagePath).existsSync()) {
+                      File(newImagePath).renameSync(moveImagePath);
+                    }
+
+                    setState(() {
+                      _filePath = null;
+                      _selectedImage = null;
+                    });
+                  }
+
                   await fileManager.updateJob(newData);
 
                   Map<String, dynamic> recheckData = {
@@ -732,12 +765,12 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("screenFontSize---------------------");
-    print(screenFontSize);
-    print("screenWidth -----------------------");
-    print(screenWidth);
-    print("screenHeight-----------------------");
-    print(screenHeight);
+    // print("screenFontSize---------------------");
+    // print(screenFontSize);
+    // print("screenWidth -----------------------");
+    // print(screenWidth);
+    // print("screenHeight-----------------------");
+    // print(screenHeight);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

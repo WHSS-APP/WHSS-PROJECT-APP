@@ -131,8 +131,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   }
 
   void showSaveConfirmationDialog(BuildContext context, newData, keyValue) {
-    
-
     showDialog(
       context: context,
       builder: (BuildContext context) {

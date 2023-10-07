@@ -696,6 +696,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),
                             onPressed: () {
+                              _selectedImage = null;
                               _pickImageFromCamera();
                             },
                           ),

@@ -130,7 +130,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     });
   }
 
-  void showSaveConfirmationDialog(BuildContext context) {
+  void showSaveConfirmationDialog(BuildContext context, newData, keyValue) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -153,10 +153,25 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
             ),
             TextButton(
               child: Text("ตกลง"),
-              onPressed: () {
+              onPressed: () async {
+                // เพิ่ม async ที่นี่
+                FileManager fileManager = FileManager();
+                if (newData['itemName'] == keyValue) {
+                  await fileManager.updateJob(newData);
+                } else {
+                  await fileManager.writeData(newData);
+                }
                 Navigator.of(context).pop();
-                showSaveSuccessDialog(context);
                 refreshButtonPressed();
+                // ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EquipmentInspectionRecord(),
+                  ),
+                  (route) => false,
+                );
+                showSaveSuccessDialog(context);
               },
             ),
           ],
@@ -1712,14 +1727,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               };
                               print("save");
                               print(newData['itemName']);
-
-                              FileManager fileManager = FileManager();
-                              if (newData['itemName'] == keyValue) {
-                                await fileManager.updateJob(newData);
-                              } else {
-                                await fileManager.writeData(newData);
-                              }
-                              showSaveConfirmationDialog(context);
+                              showSaveConfirmationDialog(
+                                  context, newData, keyValue);
                             },
                                 "SAVE",
                                 Color.fromRGBO(249, 152, 36, 1),

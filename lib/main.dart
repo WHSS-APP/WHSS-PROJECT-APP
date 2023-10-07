@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   var app = MultiProvider(
+    
     providers: [
       ChangeNotifierProvider(create: (_)=> FileController())
     ],

@@ -5,6 +5,7 @@ import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/model/job.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EquipmentInspectionRecord extends StatefulWidget {
   const EquipmentInspectionRecord({Key? key});

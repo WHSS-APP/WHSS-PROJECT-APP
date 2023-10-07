@@ -16,6 +16,7 @@ import 'package:project_whss_app/model/location.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EquipmentCheck extends StatefulWidget {
   final String? strcValue;
@@ -362,6 +363,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   @override
   void initState() {
     super.initState();
+    requestPermission();
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
 
@@ -631,8 +633,47 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         : buttonChange;
   }
 
+  void requestPermission() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    var statusCamera = await Permission.camera.status;
+    if (statusCamera.isGranted) {
+      await Permission.camera.request();
+    }
+
+    var statusManageExternalStorage =
+        await Permission.manageExternalStorage.status;
+    if (statusManageExternalStorage.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+  }
+
+  // Example function to request external storage permission
+  Future<void> requestExternalStoragePermission() async {
+    var status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      print("Permission granted");
+      // Permission granted, you can now access external storage.
+      // You can perform file I/O operations here.
+    } else if (status.isDenied) {
+      // Permission denied.
+      // You might want to inform the user and provide guidance on how to enable the permission.
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied.
+      // You might want to open the app settings to allow the user to enable the permission manually.
+      openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // call permissions
+    requestExternalStoragePermission();
+
     String keyValue = widget.keyValue ?? '';
     print(_itemName);
     context.read<FileController>().readStrLoct();
@@ -641,11 +682,25 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
+    print("screenFontSize---------------------");
+    print(screenFontSize);
+    print("screenWidth -----------------------");
+    print(screenWidth);
+    print("screenHeight-----------------------");
+    print(screenHeight);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Equipment Check"),
+        title: Text(
+          "Equipment Check",
+          style: TextStyle(
+            fontSize: screenFontSize >= 480
+                ? 18
+                : screenFontSize >= 320
+                    ? 12
+                    : 10,
+          ),
+        ),
         backgroundColor: Color(0xFF151D28),
         leading: BackButton(
           color: Colors.white,
@@ -699,16 +754,20 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(
                           width: screenWidth >= 480
                               ? screenWidth / 1.8
-                              : screenWidth / 1.8,
+                              : screenWidth >= 320
+                                  ? screenWidth / 1.6
+                                  : screenWidth / 1.8,
                           height: screenHeight >= 1000
                               ? screenHeight / 20
-                              : screenHeight / 18,
+                              : screenHeight >= 679
+                                  ? screenHeight / 18
+                                  : screenHeight / 18,
                           child: MaterialButton(
                             color: Color.fromRGBO(214, 129, 29, 1),
                             child: const Text(
                               "Take Photo",
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ),
                             onPressed: () {
                               _selectedImage = null;
@@ -720,16 +779,20 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(
                             width: screenWidth >= 480
                                 ? screenWidth / 3.4
-                                : screenWidth / 3.5,
+                                : screenWidth >= 320
+                                    ? screenWidth / 3.4
+                                    : screenWidth / 3.4,
                             height: screenHeight >= 1000
                                 ? screenHeight / 20
-                                : screenHeight / 18,
+                                : screenHeight >= 679
+                                    ? screenHeight / 18
+                                    : screenHeight / 18,
                             child: MaterialButton(
                               color: Color.fromRGBO(146, 136, 125, 1),
                               child: const Text(
                                 "Refresh",
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white, fontSize: 12),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -746,7 +809,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28,
@@ -755,28 +820,36 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(89, 96, 91, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.021
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
-                                ? screenHeight / 22
+                                ? screenHeight / 21
                                 : screenHeight / 28,
                             () {},
                             "LVL",
                             Color.fromRGBO(146, 136, 125, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.021
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -819,13 +892,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(176, 34, 42, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.020
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -862,13 +939,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(249, 152, 36, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.020
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 6.7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -921,13 +1002,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(55, 167, 93, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.020
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -966,7 +1051,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(89, 96, 91, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.020
+                                    : screenFontSize * 0.016,
                             Colors.white),
                       ],
                     ),
@@ -981,7 +1068,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -998,13 +1087,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             BLKbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
-                                : screenFontSize * 0.03,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.03
+                                    : screenFontSize * 0.03,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1021,13 +1114,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             LVLbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
-                                : screenFontSize * 0.03,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.03
+                                    : screenFontSize * 0.03,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28,
@@ -1041,8 +1138,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28,
@@ -1056,8 +1155,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28,
@@ -1071,8 +1172,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28,
@@ -1096,7 +1199,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1113,13 +1218,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             BLKbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
-                                : screenFontSize * 0.03,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.03
+                                    : screenFontSize * 0.03,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
                                 ? screenWidth / 8
-                                : screenWidth / 8,
+                                : screenWidth >= 320
+                                    ? screenWidth / 7.4
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1136,13 +1245,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             LVLbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
-                                : screenFontSize * 0.03,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.03
+                                    : screenFontSize * 0.03,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1158,13 +1271,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             buttonWarning,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.023
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.5
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1180,13 +1297,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             buttonRepair,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.023
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 7,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1202,13 +1323,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             buttonSupplement,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.023
+                                    : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.008),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 7
-                                : screenWidth / 6.6,
+                                ? screenWidth / 8
+                                : screenWidth >= 320
+                                    ? screenWidth / 6.25
+                                    : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
@@ -1224,7 +1349,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             buttonChange,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
-                                : screenFontSize * 0.023,
+                                : screenFontSize >= 320
+                                    ? screenFontSize * 0.018
+                                    : screenFontSize * 0.016,
                             Colors.white),
                       ],
                     ),
@@ -1243,7 +1370,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 _buildButton(
                                     screenWidth >= 480
                                         ? screenWidth / 8
-                                        : screenWidth / 8,
+                                        : screenWidth >= 320
+                                            ? screenWidth / 7.4
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1260,13 +1389,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     BLKbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
                                         ? screenWidth / 8
-                                        : screenWidth / 8,
+                                        : screenWidth >= 320
+                                            ? screenWidth / 7.4
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1283,13 +1416,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     LVLbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1310,13 +1447,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn7,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1337,13 +1478,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn8,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.black),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.25
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1364,7 +1509,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn9,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                               ],
@@ -1380,7 +1527,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 _buildButton(
                                     screenWidth >= 480
                                         ? screenWidth / 8
-                                        : screenWidth / 8,
+                                        : screenWidth >= 320
+                                            ? screenWidth / 7.4
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1397,13 +1546,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     BLKbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
                                         ? screenWidth / 8
-                                        : screenWidth / 8,
+                                        : screenWidth >= 320
+                                            ? screenWidth / 7.4
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1420,13 +1573,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     LVLbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1447,13 +1604,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn4,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.black),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1474,13 +1635,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn5,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.25
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1501,7 +1666,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn6,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.black),
                                 SizedBox(width: screenWidth * 0.01),
                               ],
@@ -1517,28 +1684,36 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(
                                   width: screenWidth >= 480
                                       ? screenWidth / 8
-                                      : screenWidth / 8,
+                                      : screenWidth >= 320
+                                          ? screenWidth / 7.4
+                                          : screenWidth / 5,
                                   height: screenHeight >= 1000
                                       ? screenHeight / 22
-                                      : screenHeight / 28,
+                                      : screenHeight >= 679
+                                          ? screenHeight / 20
+                                          : screenHeight / 18,
                                   child: TextField(
+                                    keyboardType: TextInputType.number,
                                     controller: _BlkEditingController,
                                     cursorColor: Colors.white,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: screenFontSize >= 480
-                                          ? screenFontSize * 0.03
-                                          : screenFontSize * 0.03,
+                                          ? screenFontSize * 0.025
+                                          : screenFontSize >= 320
+                                              ? screenFontSize * 0.021
+                                              : screenFontSize * 0.016,
                                       color: Colors.white,
                                     ),
                                     decoration: const InputDecoration(
                                       filled: true, // ทำให้มีพื้นหลัง
                                       fillColor: Color.fromRGBO(89, 96, 91, 1),
-                                      hintText: 'INPUT',
+                                      hintText: 'IN',
                                       hintStyle: TextStyle(
                                           color: Color.fromARGB(
                                               255, 255, 255, 255),
-                                          fontSize: 12),
+                                          fontSize: 10),
                                       alignLabelWithHint: true,
                                     ),
                                     onChanged: (BLK) {
@@ -1559,29 +1734,37 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(
                                   width: screenWidth >= 480
                                       ? screenWidth / 8
-                                      : screenWidth / 8,
+                                      : screenWidth >= 320
+                                          ? screenWidth / 7.4
+                                          : screenWidth / 5,
                                   height: screenHeight >= 1000
                                       ? screenHeight / 22
-                                      : screenHeight / 28,
+                                      : screenHeight >= 679
+                                          ? screenHeight / 20
+                                          : screenHeight / 18,
                                   child: TextField(
+                                    keyboardType: TextInputType.number,
                                     controller: _LvlEditingController,
                                     cursorColor: Colors.white,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: screenFontSize >= 480
-                                          ? screenFontSize * 0.03
-                                          : screenFontSize * 0.03,
+                                          ? screenFontSize * 0.025
+                                          : screenFontSize >= 320
+                                              ? screenFontSize * 0.021
+                                              : screenFontSize * 0.016,
                                       color: Colors.white,
                                     ),
                                     decoration: const InputDecoration(
                                       filled: true,
                                       fillColor:
                                           Color.fromRGBO(146, 136, 125, 1),
-                                      hintText: 'INPUT',
+                                      hintText: 'IN',
                                       hintStyle: TextStyle(
                                           color: Color.fromARGB(
                                               255, 255, 255, 255),
-                                          fontSize: 12),
+                                          fontSize: 10),
                                       alignLabelWithHint: true,
                                     ),
                                     onChanged: (LVL) {
@@ -1601,8 +1784,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1623,13 +1808,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.5
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1650,13 +1839,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.black),
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 7
-                                        : screenWidth / 7,
+                                        ? screenWidth / 8
+                                        : screenWidth >= 320
+                                            ? screenWidth / 6.25
+                                            : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
@@ -1677,7 +1870,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Numbtn3,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
-                                        : screenFontSize * 0.03,
+                                        : screenFontSize >= 320
+                                            ? screenFontSize * 0.03
+                                            : screenFontSize * 0.03,
                                     Colors.white),
                                 SizedBox(width: screenWidth * 0.01),
                               ],
@@ -1689,11 +1884,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           children: [
                             _buildButton(
                                 screenWidth >= 480
-                                    ? screenWidth / 7
-                                    : screenWidth / 7,
+                                    ? screenWidth / 8
+                                    : screenWidth >= 320
+                                        ? screenWidth / 6.25
+                                        : screenWidth / 5,
                                 screenHeight >= 1000
-                                    ? screenHeight / 6.6
-                                    : screenHeight / 6, () async {
+                                    ? screenHeight / 6
+                                    : screenHeight >= 679
+                                        ? screenHeight / 5.2
+                                        : screenHeight / 6.6, () async {
                               DateTime now = DateTime.now();
                               String formattedDate =
                                   DateFormat('yyyyMMddHHmmss').format(now);
@@ -1734,7 +1933,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 Color.fromRGBO(249, 152, 36, 1),
                                 screenFontSize >= 480
                                     ? screenFontSize * 0.025
-                                    : screenFontSize * 0.024,
+                                    : screenFontSize >= 320
+                                        ? screenFontSize * 0.021
+                                        : screenFontSize * 0.023,
                                 Colors.white),
                           ],
                         )

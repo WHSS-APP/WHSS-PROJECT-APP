@@ -16,6 +16,7 @@ import 'package:project_whss_app/model/location.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EquipmentCheck extends StatefulWidget {
   final String? strcValue;
@@ -362,6 +363,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   @override
   void initState() {
     super.initState();
+    requestPermission();
     optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
     optionsDAMG = damageCode.map((e) => e.damge!).toList();
 
@@ -631,8 +633,47 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         : buttonChange;
   }
 
+  void requestPermission() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    var statusCamera = await Permission.camera.status;
+    if (statusCamera.isGranted) {
+      await Permission.camera.request();
+    }
+
+    var statusManageExternalStorage =
+        await Permission.manageExternalStorage.status;
+    if (statusManageExternalStorage.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+  }
+
+  // Example function to request external storage permission
+  Future<void> requestExternalStoragePermission() async {
+    var status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      print("Permission granted");
+      // Permission granted, you can now access external storage.
+      // You can perform file I/O operations here.
+    } else if (status.isDenied) {
+      // Permission denied.
+      // You might want to inform the user and provide guidance on how to enable the permission.
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied.
+      // You might want to open the app settings to allow the user to enable the permission manually.
+      openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // call permissions
+    requestExternalStoragePermission();
+
     String keyValue = widget.keyValue ?? '';
     print(_itemName);
     context.read<FileController>().readStrLoct();

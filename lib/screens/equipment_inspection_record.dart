@@ -18,7 +18,8 @@ class EquipmentInspectionRecord extends StatefulWidget {
 class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   late List<Job> filteredData = [];
   // ignore: non_constant_identifier_names
-  late List<Job> result_data = context.read<FileController>().job!;
+  late List<Job> result_data = [];
+
   Future<void> refreshData() async {
     setState(() {
       filteredData = result_data.toList();
@@ -37,7 +38,6 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
     var status = await Permission.storage.status;
     if (status.isGranted) {
       await Permission.storage.request();
-
     }
 
     var statusCamera = await Permission.camera.status;
@@ -45,11 +45,11 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
       await Permission.camera.request();
     }
 
-    var statusManageExternalStorage = await Permission.manageExternalStorage.status;
+    var statusManageExternalStorage =
+        await Permission.manageExternalStorage.status;
     if (statusManageExternalStorage.isGranted) {
       await Permission.manageExternalStorage.request();
     }
-
   }
 
   // Example function to request external storage permission
@@ -70,11 +70,24 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
     }
   }
 
+  void readData() async {
+    await context.read<FileController>().readJobs();
+    if (mounted) {
+      result_data = context.read<FileController>().job!;
+      refreshData();
+    }
+
+    // setState(() {
+    //   filteredData = result_data.toList();
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
-    requestExternalStoragePermission();
-    context.read<FileController>().readJobs();
-    
+    // requestExternalStoragePermission();
+    // context.read<FileController>().readJobs();
+    readData();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

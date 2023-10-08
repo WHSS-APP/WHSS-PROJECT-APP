@@ -84,7 +84,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     setState(() {
       _filePath = null;
       _selectedImage = null;
-      _itemName = '';
+      _itemName = widget.keyValue ?? '';
     });
   }
 
@@ -226,18 +226,23 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                   await fileManager.writeData(newData);
                 }
                 Navigator.of(context).pop();
-                // refreshButtonPressed();
-                // loadData();
 
-                // ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => EquipmentInspectionRecord(),
-                //   ),
-                //   (route) => false,
-                // );
+                // refreshButtonPressed();
+
+                //ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
+                if (widget.keyValue != null && widget.keyValue != '') {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EquipmentInspectionRecord(),
+                    ),
+                    (route) => false,
+                  );
+                }
+
                 showSaveSuccessDialog(context);
+                refreshOnlyImg();
               },
             ),
           ],
@@ -252,7 +257,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         Future.delayed(Duration(seconds: 2), () {
-          refreshOnlyImg();
+          // refreshOnlyImg();
           Navigator.of(context).pop();
         });
 
@@ -460,15 +465,16 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     super.initState();
     requestPermission();
     Future.delayed(Duration(milliseconds: 50), () {
-      context.read<FileController>().readStrLoct();
-      context.read<FileController>().readDmg();
+      setRead();
+      // context.read<FileController>().readStrLoct();
+      // context.read<FileController>().readDmg();
 
-      List<DamgeAsset> damageCode = context.read<FileController>().damage;
-      List<LocationAsset> strcLoctCode =
-          context.read<FileController>().strcLoct;
+      // List<DamgeAsset> damageCode = context.read<FileController>().damage;
+      // List<LocationAsset> strcLoctCode =
+      //     context.read<FileController>().strcLoct;
 
-      optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
-      optionsDAMG = damageCode.map((e) => e.damge!).toList();
+      // optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+      // optionsDAMG = damageCode.map((e) => e.damge!).toList();
     });
 
     _itemName = widget.keyValue ?? '';
@@ -914,6 +920,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               onPressed: () {
                                 setState(() {
                                   // refreshButtonPressed();
+                                  refreshOnlyImg();
                                 });
                               },
                             )),

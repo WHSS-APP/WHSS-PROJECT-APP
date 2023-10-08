@@ -22,6 +22,12 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   // ignore: non_constant_identifier_names
   late List<Job> result_data = [];
 
+  bool ascendingOrder = true; // Initially, set the sorting order to ascending
+
+  void toggleSortOrder() {
+    ascendingOrder = !ascendingOrder; // Toggle the sorting order
+  }
+
   Future<void> refreshData() async {
     setState(() {
       filteredData = result_data.toList();
@@ -29,15 +35,70 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   }
 
   void sortByStructure() {
-    print(filteredData.map((data) => data.location.strc + data.location.loct));
-    filteredData.sort((a, b) => a.location.strc.compareTo(b.location.strc));
-    print("result_data ---------------------------");
-    print(filteredData);
+    Iterable<String> sortSTRC;
+    if (ascendingOrder) {
+      sortSTRC = filteredData
+          .map(
+              (data) => data.location.strc + data.location.loct + data.itemName)
+          .toList()
+        ..sort();
+    } else {
+      sortSTRC = filteredData
+          .map(
+              (data) => data.location.strc + data.location.loct + data.itemName)
+          .toList()
+        ..sort((a, b) => b.compareTo(a));
+    }
+
+    // set filteredData to sorted data
+    setState(() {
+      filteredData = sortSTRC
+          .map((strc) => filteredData.firstWhere((data) =>
+              data.location.strc + data.location.loct + data.itemName == strc))
+          .toList();
+    });
   }
 
-  void sortByImageTime() {}
+  void sortByImageTime() {
+    Iterable<String> sortItemName;
+    if (ascendingOrder) {
+      sortItemName = filteredData.map((data) => data.itemName).toList()..sort();
+    } else {
+      sortItemName = filteredData.map((data) => data.itemName).toList()
+        ..sort((a, b) => b.compareTo(a));
+    }
 
-  void sortByDMG() {}
+    // set filteredData to sorted data
+    setState(() {
+      filteredData = sortItemName
+          .map((itemName) =>
+              filteredData.firstWhere((data) => data.itemName == itemName))
+          .toList();
+    });
+  }
+
+  void sortByDMG() {
+    Iterable<String> sortDamage;
+    if (ascendingOrder) {
+      sortDamage = filteredData
+          .map((data) => data.damage.damge + data.damage.code + data.itemName)
+          .toList()
+        ..sort();
+    } else {
+      sortDamage = filteredData
+          .map((data) => data.damage.damge + data.damage.code + data.itemName)
+          .toList()
+        ..sort((a, b) => b.compareTo(a));
+    }
+
+    // set filteredData to sorted data
+    setState(() {
+      filteredData = sortDamage
+          .map((damage) => filteredData.firstWhere((data) =>
+              data.damage.damge + data.damage.code + data.itemName == damage))
+          .toList();
+    });
+  }
 
   @override
   void initState() {
@@ -82,8 +143,8 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
       openAppSettings();
     }
   }
-  
-    void readData() async {
+
+  void readData() async {
     await context.read<FileController>().readJobs();
     if (mounted) {
       result_data = context.read<FileController>().job!;
@@ -102,7 +163,9 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
     double screenHeight = MediaQuery.of(context).size.height;
     requestExternalStoragePermission();
 
-     readData();
+    if (result_data.isEmpty) {
+      readData();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -133,11 +196,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
           PopupMenuButton<String>(
             onSelected: (value) {
               if (value == "ชื่อโครงสร้าง") {
+                toggleSortOrder();
                 sortByStructure();
               } else if (value == "เวลาที่ถ่ายภาพ - เก่าสุด") {
+                toggleSortOrder();
                 sortByImageTime();
               } else if (value == "DMG") {
                 sortByDMG();
+                toggleSortOrder();
               }
 
               // หลังจากที่คุณเรียงลำดับ result_data ใหม่แล้ว คุณอาจต้องอัพเดทหน้า UI โดยการสร้าง setState() หรือเมธอดอื่น ๆ ที่เหมาะสม

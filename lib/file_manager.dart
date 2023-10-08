@@ -163,7 +163,7 @@ class FileManager {
   }
 
   // delete job
-  deleteJob(Map<String, dynamic> newData) async {
+  deleteJob(String id) async {
     File file = await _readJobs;
     String fileContent = await file.readAsString();
 
@@ -172,7 +172,7 @@ class FileManager {
 
     // update data by == itemName
     for (var i = 0; i < jsonList.length; i++) {
-      if (jsonList[i]['itemName'] == newData['itemName']) {
+      if (jsonList[i]['itemName'] == id) {
         jsonList.removeAt(i);
       }
     }

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/file_manager.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 import 'package:project_whss_app/screens/equipment_inspection_record.dart';
@@ -80,6 +82,51 @@ class _DetailState extends State<Detail> {
             TextButton(
               child: Text("ลบข้อมูล"),
               onPressed: () async {
+                // call file controller to delete file
+                FileManager fileManager = FileManager();
+
+                await fileManager.deleteJob(widget.keyValue!);
+                // delete img file
+                // delete img in image
+                final appDocumentsDir = await getExternalStorageDirectory();
+                final imagesDir = Directory('${appDocumentsDir?.path}/Images');
+                final updateImageDir = Directory(
+                    '${appDocumentsDir?.path}/recheckImage'); //recheckImage
+
+                if (!imagesDir.existsSync()) {
+                  imagesDir.createSync(recursive: true);
+                }
+
+                final newImagePath = '${imagesDir.path}/${widget.keyValue}.png';
+                final moveImagePath =
+                    '${updateImageDir.path}/${_itemName}_delete.png';
+
+                if (File(newImagePath).existsSync()) {
+                  File(newImagePath).renameSync(moveImagePath);
+                }
+
+                Map<String, dynamic> recheckData = {
+                  "itemName": "${widget.keyValue}_delete",
+                  "location": {
+                    "strc": widget.strcValue,
+                    "loct": widget.loctValue
+                  },
+                  "damage": {
+                    "damge": widget.damgValue,
+                    "code": widget.codeValue,
+                    "description": widget
+                        .descriptionValue, // selectDesscriptionFrom DMG Code
+                  },
+                  "level": widget.levelValue, // LVL
+                  "block": widget.blockValue, //BLOCK
+                  "direction": widget.directionValue,
+                  "status": widget.statusValue,
+                  "picturePath": widget.picturePathValue,
+                };
+
+                await fileManager.recheckJob(recheckData);
+
+                // ignore: use_build_context_synchronously
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

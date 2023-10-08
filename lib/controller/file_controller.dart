@@ -70,14 +70,14 @@ class FileController extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteJob(Job job) async {
+  deleteJob(String itemName) async {
     dynamic result = await FileManager().readJob();
     // print(result);
 
     if (result != null && result is List<dynamic>) {
       // List<dynamic> jsonList = result;
       List<Job> jobs = result.map((json) => Job.fromJson(json)).toList();
-      jobs.removeWhere((j) => j.itemName == job.itemName);
+      jobs.removeWhere((j) => j.itemName == itemName);
       await FileManager().writeData(jobs as Map<String, dynamic>);
       _job = jobs;
     }

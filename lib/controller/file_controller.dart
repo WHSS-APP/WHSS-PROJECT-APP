@@ -104,6 +104,7 @@ class FileController extends ChangeNotifier {
   readDmg() async {
     // get result from dmg_code.json assets/data/dmg_code.json
     dynamic result = await FileManager().readDmg();
+    print('result');
 
     if (result != null && result is List<dynamic>) {
       // List<dynamic> jsonList = result;

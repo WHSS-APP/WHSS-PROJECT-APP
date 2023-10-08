@@ -80,6 +80,14 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     );
   }
 
+  void refreshOnlyImg() {
+    setState(() {
+      _filePath = null;
+      _selectedImage = null;
+      _itemName = '';
+    });
+  }
+
   void refreshButtonPressed() {
     setState(() {
       buttonWarning = Color.fromRGBO(176, 34, 42, 1);
@@ -179,7 +187,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                     }
 
                     final newImagePath = '${imagesDir.path}/$keyValue.png';
-                    final moveImagePath = '${updateImageDir.path}/$_itemName.png';
+                    final moveImagePath =
+                        '${updateImageDir.path}/$_itemName.png';
 
                     if (File(newImagePath).existsSync()) {
                       File(newImagePath).renameSync(moveImagePath);
@@ -217,15 +226,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                   await fileManager.writeData(newData);
                 }
                 Navigator.of(context).pop();
-                refreshButtonPressed();
+                // refreshButtonPressed();
+                // loadData();
+
                 // ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EquipmentInspectionRecord(),
-                  ),
-                  (route) => false,
-                );
+                // Navigator.pushAndRemoveUntil(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => EquipmentInspectionRecord(),
+                //   ),
+                //   (route) => false,
+                // );
                 showSaveSuccessDialog(context);
               },
             ),
@@ -241,6 +252,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         Future.delayed(Duration(seconds: 2), () {
+          refreshOnlyImg();
           Navigator.of(context).pop();
         });
 
@@ -447,8 +459,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   void initState() {
     super.initState();
     requestPermission();
-    optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
-    optionsDAMG = damageCode.map((e) => e.damge!).toList();
+    Future.delayed(Duration(milliseconds: 50), () {
+      context.read<FileController>().readStrLoct();
+      context.read<FileController>().readDmg();
+
+      List<DamgeAsset> damageCode = context.read<FileController>().damage;
+      List<LocationAsset> strcLoctCode =
+          context.read<FileController>().strcLoct;
+
+      optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+      optionsDAMG = damageCode.map((e) => e.damge!).toList();
+    });
 
     _itemName = widget.keyValue ?? '';
     checkSTRC = widget.strcValue ?? '';
@@ -752,6 +773,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     }
   }
 
+  void setRead() async {
+    await context.read<FileController>().readStrLoct();
+    await context.read<FileController>().readDmg();
+
+    optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+    optionsDAMG = damageCode.map((e) => e.damge!).toList();
+
+    print('readData');
+    print(optionsSTRC.length);
+  }
+
   @override
   Widget build(BuildContext context) {
     // call permissions
@@ -759,8 +791,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
     String keyValue = widget.keyValue ?? '';
     print(_itemName);
-    context.read<FileController>().readStrLoct();
-    context.read<FileController>().readDmg();
+    // context.read<FileController>().readStrLoct();
+    // context.read<FileController>().readDmg();
+
+    setRead();
 
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -879,7 +913,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  refreshButtonPressed();
+                                  // refreshButtonPressed();
                                 });
                               },
                             )),

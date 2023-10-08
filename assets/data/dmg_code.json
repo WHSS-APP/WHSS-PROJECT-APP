@@ -4,11 +4,15 @@
     "code": [
       {
         "id": "D",
-        "description": "Minimal damage"
+        "description": "Arm ชั้นที่ 1 มีความเสียหาย"
       },
       {
-        "id": "A",
-        "description": "Middle damageeee"
+        "id": "N",
+        "description": "น็อตยึด Arm ชั้นที่ 1 หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "Arm ชั้นที่ 1 มีสนิม"
       }
     ]
   },
@@ -17,11 +21,181 @@
     "code": [
       {
         "id": "D",
-        "description": "Rust"
+        "description": "คานชั้นที่ 1 มีความเสียหาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึดคานชั้นที่ 1 หลวม/หลุด/หาย"
+      },
+      {
+        "id": "J",
+        "description": "Joint ของคานชั้นที่ 1 มีความเสียหาย"
+      },
+      {
+        "id": "C",
+        "description": "คานชั้นที่ 1 มีสนิม"
+      },
+      {
+        "id": "M",
+        "description": "ไม่มีคานชั้นที่ 1"
+      },
+      {
+        "id": "S",
+        "description": "Sub-Beam ชั้นที่ 1 มีความเสียหาย"
+      }
+    ]
+  },
+  {
+    "damge": "F",
+    "code": [
+      {
+        "id": "D",
+        "description": "Base Plate มีความเสียหาย"
+      },
+      {
+        "id": "A",
+        "description": "น็อตยึดพื้นของ Base Plate หลวม/หลุด/หาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึด Base Plate หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "Base Plate มีสนิม"
       },
       {
         "id": "T",
-        "description": "Burn"
+        "description": "Base Plate เกิดการบิดตัวไปจากตำแหน่งเดิม"
+      },
+      {
+        "id": "S",
+        "description": "Shim Plate มีความเสียหาย"
+      },
+      {
+        "id": "SC",
+        "description": "Shim Plate มีสนิม"
+      }
+    ]
+  },
+  {
+    "damge": "G",
+    "code": [
+      {
+        "id": "D",
+        "description": "Guard มีความเสียหาย"
+      },
+      {
+        "id": "A",
+        "description": "น็อตยึดพื้นของ Guard หลวม/หลุด/หาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึด Guard หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "Guard มีสนิม"
+      },
+      {
+        "id": "M",
+        "description": "ไม่มี Guard"
+      }
+    ]
+  },
+  {
+    "damge": "P",
+    "code": [
+      {
+        "id": "D",
+        "description": "Post Protector มีความเสียหาย"
+      },
+      {
+        "id": "A",
+        "description": "น็อตยึดพื้นของ Post Protector หลวม/หลุด/หาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึด Post Protector หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "Post Protector มีสนิม"
+      },
+      {
+        "id": "M",
+        "description": "ไม่มี Post Protector"
+      }
+    ]
+  },
+  {
+    "damge": "R",
+    "code": [
+      {
+        "id": "D",
+        "description": "Rail ชั้นที่ 1 มีความเสียหาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึด Rail ชั้นที่ 1 หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "Rail  มีสนิม"
+      }
+    ]
+  },
+  {
+    "damge": "S",
+    "code": [
+      {
+        "id": "D",
+        "description": "เหล็กแผงเสาชั้นที่ 1 มีความเสียหาย"
+      },
+      {
+        "id": "N",
+        "description": "น็อตยึดเหล็กแผงเสาชั้นที่ 1 หลวม/หลุด/หาย"
+      },
+      {
+        "id": "C",
+        "description": "เหล็กแผงเสามีสนิม"
+      },
+      {
+        "id": "M",
+        "description": "ไม่มีเหล็กแผงเสาชั้นที่ 1"
+      },
+      {
+        "id": "PD",
+        "description": "Spacer ชั้นที่ 1 มีความเสียหาย"
+      },
+      {
+        "id": "PN",
+        "description": "น็อตยึด Spacer ชั้น 1 หลวม/หลุด/หาย"
+      },
+      {
+        "id": "PM",
+        "description": "Spacer ขาดหาย"
+      }
+    ]
+  },
+  {
+    "damge": "U",
+    "code": [
+      {
+        "id": "D",
+        "description": "เสามีความเสียหายที่ความสูง 1 เมตร"
+      },
+      {
+        "id": "T",
+        "description": "เสาเกิดการบิดตัวไปจากตำแหน่งเดิม"
+      },
+      {
+        "id": "C",
+        "description": "เสามีสนิมที่ความสูง 1 เมตร"
+      },
+      {
+        "id": "M",
+        "description": "ไม่มีเสา"
       }
     ]
   }

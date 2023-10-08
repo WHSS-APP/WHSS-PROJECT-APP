@@ -17,6 +17,7 @@ import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class EquipmentCheck extends StatefulWidget {
   final String? strcValue;
@@ -357,16 +358,29 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   }
 
   Future _pickImageFromCamera() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final returnedImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        maxWidth: 400,
+        maxHeight: 400,
+        imageQuality: 100);
 
     if (returnedImage == null) return;
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyyMMddHHmmss').format(now);
 
+    // crop image to square by using image_cropper
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: returnedImage.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+    );
+
+    if (croppedFile == null) return;
+
     final originalImage =
-        img.decodeImage(File(returnedImage.path).readAsBytesSync());
+        img.decodeImage(File(croppedFile.path).readAsBytesSync());
     if (originalImage != null) {
       final appDocumentsDir = await getExternalStorageDirectory();
       final imagesDir = Directory('${appDocumentsDir?.path}/Images');
@@ -380,20 +394,6 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         updateImageDir.createSync(recursive: true);
       }
 
-      // // relocation image
-      // if (_filePath != '' && _filePath != null) {
-      //   final appDocumentsDir = await getExternalStorageDirectory();
-      //   final imagesDir = Directory('${appDocumentsDir?.path}/ImagesRecheck');
-      //   if (!imagesDir.existsSync()) {
-      //     imagesDir.createSync(recursive: true);
-      //   }
-      //   final newImagePath = '${imagesDir.path}/$keyValue.png';
-      //   if (File(newImagePath).existsSync()) {
-      //     File(newImagePath).deleteSync();
-      //   }
-      //   File(_filePath!).renameSync(newImagePath);
-      // }
-
       if (_itemName != '' && _itemName != null) {
         final newImagePath = '${imagesDir.path}/$_itemName.png';
 
@@ -403,16 +403,13 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
           // moveFile newImagePath to recheckImage
           File(newImagePath).renameSync(moveImagePath);
         }
-        final resizedImage = img.copyResize(
-          originalImage,
-          width: 400,
-          height: 400,
-        );
+        // final resizedImage = img.copyResize(
+        //   originalImage,
+        //   width: 400,
+        //   height: 400,
+        // );
 
-        // moveFile of newImagePath to recheckImage
-
-        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
-        // File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
 
         setState(() {
           _filePath = newImagePath;
@@ -421,9 +418,12 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       } else {
         final newImagePath = '${imagesDir.path}/K$formattedDate.png';
 
-        final resizedImage =
-            img.copyResize(originalImage, width: 400, height: 400);
-        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+        // final resizedImage =
+        //     img.copyResize(originalImage, width: 400, height: 400);
+
+        // final resizedImage = img.copyResizeCropSquare(originalImage, size: 400);
+
+        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
 
         setState(() {
           _filePath = newImagePath;

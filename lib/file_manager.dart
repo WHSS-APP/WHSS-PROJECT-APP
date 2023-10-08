@@ -29,6 +29,11 @@ class FileManager {
     return File('$path/whss-data.json');
   }
 
+  Future<File> get _recheckJobs async {
+    final path = await _dicrectoryPath;
+    return File('$path/whss-recheck.json');
+  }
+
   Future<File> get _jsonFile async {
     final path = await _dicrectoryPath;
     return File('$path/whss.json');
@@ -151,7 +156,50 @@ class FileManager {
         jsonList[i] = newData;
       }
     }
- 
+
+    String jsonStr = json.encode(jsonList);
+
+    await file.writeAsString(jsonStr);
+  }
+
+  // delete job
+  deleteJob(Map<String, dynamic> newData) async {
+    File file = await _readJobs;
+    String fileContent = await file.readAsString();
+
+    List<Map<String, dynamic>> jsonList =
+        List<Map<String, dynamic>>.from(json.decode(fileContent));
+
+    // update data by == itemName
+    for (var i = 0; i < jsonList.length; i++) {
+      if (jsonList[i]['itemName'] == newData['itemName']) {
+        jsonList.removeAt(i);
+      }
+    }
+
+    String jsonStr = json.encode(jsonList);
+
+    await file.writeAsString(jsonStr);
+  }
+
+  recheckJob(Map<String, dynamic> newData) async {
+    File file = await _recheckJobs;
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+      await file.writeAsString('[]');
+    }
+
+    String fileContent = await file.readAsString();
+
+    if (fileContent.isEmpty) {
+      fileContent = '[]';
+    }
+
+    List<Map<String, dynamic>> jsonList =
+        List<Map<String, dynamic>>.from(json.decode(fileContent));
+
+    jsonList.add(newData);
+
     String jsonStr = json.encode(jsonList);
 
     await file.writeAsString(jsonStr);

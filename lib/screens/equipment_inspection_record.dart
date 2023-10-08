@@ -20,7 +20,8 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
   List<String> items = ['C', 'A', 'B'];
   late List<Job> filteredData = [];
   // ignore: non_constant_identifier_names
-  late List<Job> result_data = context.read<FileController>().job!;
+  late List<Job> result_data = [];
+
   Future<void> refreshData() async {
     setState(() {
       filteredData = result_data.toList();
@@ -81,6 +82,18 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
       openAppSettings();
     }
   }
+  
+    void readData() async {
+    await context.read<FileController>().readJobs();
+    if (mounted) {
+      result_data = context.read<FileController>().job!;
+      refreshData();
+    }
+
+    // setState(() {
+    //   filteredData = result_data.toList();
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +102,8 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
     double screenHeight = MediaQuery.of(context).size.height;
     requestExternalStoragePermission();
 
-    context.read<FileController>().readJobs();
+     readData();
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

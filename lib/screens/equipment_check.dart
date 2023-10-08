@@ -17,6 +17,7 @@ import 'package:project_whss_app/screens/equipment_inspection_record.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class EquipmentCheck extends StatefulWidget {
   final String? strcValue;
@@ -80,6 +81,14 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     );
   }
 
+  void refreshOnlyImg() {
+    setState(() {
+      _filePath = null;
+      _selectedImage = null;
+      _itemName = widget.keyValue ?? '';
+    });
+  }
+
   void refreshButtonPressed() {
     setState(() {
       buttonWarning = Color.fromRGBO(176, 34, 42, 1);
@@ -128,6 +137,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       checkDAMG = '';
       checkCODE = '';
       checkDescription = '';
+      _filePath = null;
     });
   }
 
@@ -157,22 +167,83 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
               onPressed: () async {
                 // เพิ่ม async ที่นี่
                 FileManager fileManager = FileManager();
+
                 if (newData['itemName'] == keyValue) {
+                  print(newData['picturePath']);
+
+                  if (newData['picturePath'] == null ||
+                      newData['picturePath'] == '') {
+                    print('delete image');
+
+                    newData['picturePath'] = '';
+                    // delete img in image
+                    final appDocumentsDir = await getExternalStorageDirectory();
+                    final imagesDir =
+                        Directory('${appDocumentsDir?.path}/Images');
+                    final updateImageDir = Directory(
+                        '${appDocumentsDir?.path}/recheckImage'); //recheckImage
+
+                    if (!imagesDir.existsSync()) {
+                      imagesDir.createSync(recursive: true);
+                    }
+
+                    final newImagePath = '${imagesDir.path}/$keyValue.png';
+                    final moveImagePath =
+                        '${updateImageDir.path}/$_itemName.png';
+
+                    if (File(newImagePath).existsSync()) {
+                      File(newImagePath).renameSync(moveImagePath);
+                    }
+
+                    setState(() {
+                      _filePath = null;
+                      _selectedImage = null;
+                    });
+                  }
+
                   await fileManager.updateJob(newData);
+
+                  Map<String, dynamic> recheckData = {
+                    "itemName": widget.keyValue,
+                    "location": {
+                      "strc": widget.strcValue,
+                      "loct": widget.loctValue
+                    },
+                    "damage": {
+                      "damge": widget.damgValue,
+                      "code": widget.codeValue,
+                      "description": widget
+                          .descriptionValue, // selectDesscriptionFrom DMG Code
+                    },
+                    "level": widget.levelValue, // LVL
+                    "block": widget.blockValue, //BLOCK
+                    "direction": widget.directionValue,
+                    "status": widget.statusValue,
+                    "picturePath": widget.picturePathValue,
+                  };
+
+                  await fileManager.recheckJob(recheckData);
                 } else {
                   await fileManager.writeData(newData);
                 }
                 Navigator.of(context).pop();
-                refreshButtonPressed();
-                // ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EquipmentInspectionRecord(),
-                  ),
-                  (route) => false,
-                );
+
+                // refreshButtonPressed();
+
+                //ทำการเปลี่ยนหน้าไปยัง EquipmentInspectionRecord
+                if (widget.keyValue != null && widget.keyValue != '') {
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EquipmentInspectionRecord(),
+                    ),
+                    (route) => false,
+                  );
+                }
+
                 showSaveSuccessDialog(context);
+                refreshOnlyImg();
               },
             ),
           ],
@@ -187,6 +258,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         Future.delayed(Duration(seconds: 2), () {
+          // refreshOnlyImg();
           Navigator.of(context).pop();
         });
 
@@ -286,33 +358,58 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   }
 
   Future _pickImageFromCamera() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final returnedImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        maxWidth: 400,
+        maxHeight: 400,
+        imageQuality: 100);
 
     if (returnedImage == null) return;
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyyMMddHHmmss').format(now);
 
+    // crop image to square by using image_cropper
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: returnedImage.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+    );
+
+    if (croppedFile == null) return;
+
     final originalImage =
-        img.decodeImage(File(returnedImage.path).readAsBytesSync());
+        img.decodeImage(File(croppedFile.path).readAsBytesSync());
     if (originalImage != null) {
       final appDocumentsDir = await getExternalStorageDirectory();
       final imagesDir = Directory('${appDocumentsDir?.path}/Images');
+      final updateImageDir = Directory('${appDocumentsDir?.path}/recheckImage');
 
       if (!imagesDir.existsSync()) {
         imagesDir.createSync(recursive: true);
       }
 
+      if (!updateImageDir.existsSync()) {
+        updateImageDir.createSync(recursive: true);
+      }
+
       if (_itemName != '' && _itemName != null) {
         final newImagePath = '${imagesDir.path}/$_itemName.png';
-        // img.decodeImage(File(newImagePath).readAsBytesSync());
+
+        final moveImagePath = '${updateImageDir.path}/$_itemName.png';
+
         if (File(newImagePath).existsSync()) {
-          File(newImagePath).deleteSync();
+          // moveFile newImagePath to recheckImage
+          File(newImagePath).renameSync(moveImagePath);
         }
-        final resizedImage =
-            img.copyResize(originalImage, width: 400, height: 400);
-        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+        // final resizedImage = img.copyResize(
+        //   originalImage,
+        //   width: 400,
+        //   height: 400,
+        // );
+
+        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
 
         setState(() {
           _filePath = newImagePath;
@@ -321,9 +418,12 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       } else {
         final newImagePath = '${imagesDir.path}/K$formattedDate.png';
 
-        final resizedImage =
-            img.copyResize(originalImage, width: 400, height: 400);
-        File(newImagePath).writeAsBytesSync(img.encodePng(resizedImage));
+        // final resizedImage =
+        //     img.copyResize(originalImage, width: 400, height: 400);
+
+        // final resizedImage = img.copyResizeCropSquare(originalImage, size: 400);
+
+        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
 
         setState(() {
           _filePath = newImagePath;
@@ -364,8 +464,18 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   void initState() {
     super.initState();
     requestPermission();
-    optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
-    optionsDAMG = damageCode.map((e) => e.damge!).toList();
+    Future.delayed(Duration(milliseconds: 50), () {
+      setRead();
+      // context.read<FileController>().readStrLoct();
+      // context.read<FileController>().readDmg();
+
+      // List<DamgeAsset> damageCode = context.read<FileController>().damage;
+      // List<LocationAsset> strcLoctCode =
+      //     context.read<FileController>().strcLoct;
+
+      // optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+      // optionsDAMG = damageCode.map((e) => e.damge!).toList();
+    });
 
     _itemName = widget.keyValue ?? '';
     checkSTRC = widget.strcValue ?? '';
@@ -669,6 +779,17 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     }
   }
 
+  void setRead() async {
+    await context.read<FileController>().readStrLoct();
+    await context.read<FileController>().readDmg();
+
+    optionsSTRC = strcLoctCode.map((e) => e.strc!).toList();
+    optionsDAMG = damageCode.map((e) => e.damge!).toList();
+
+    print('readData');
+    print(optionsSTRC.length);
+  }
+
   @override
   Widget build(BuildContext context) {
     // call permissions
@@ -676,18 +797,20 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
     String keyValue = widget.keyValue ?? '';
     print(_itemName);
-    context.read<FileController>().readStrLoct();
-    context.read<FileController>().readDmg();
+    // context.read<FileController>().readStrLoct();
+    // context.read<FileController>().readDmg();
+
+    setRead();
 
     double screenFontSize = MediaQuery.of(context).size.width;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("screenFontSize---------------------");
-    print(screenFontSize);
-    print("screenWidth -----------------------");
-    print(screenWidth);
-    print("screenHeight-----------------------");
-    print(screenHeight);
+    // print("screenFontSize---------------------");
+    // print(screenFontSize);
+    // print("screenWidth -----------------------");
+    // print(screenWidth);
+    // print("screenHeight-----------------------");
+    // print(screenHeight);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -796,7 +919,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                               ),
                               onPressed: () {
                                 setState(() {
-                                  refreshButtonPressed();
+                                  // refreshButtonPressed();
+                                  refreshOnlyImg();
                                 });
                               },
                             )),

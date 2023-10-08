@@ -876,7 +876,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       children: [
                         SizedBox(
                           width: screenWidth >= 480
-                              ? screenWidth / 1.8
+                              ? screenWidth / 1.9
                               : screenWidth >= 320
                                   ? screenWidth / 1.6
                                   : screenWidth / 1.8,
@@ -970,7 +970,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1023,7 +1023,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1070,9 +1070,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1127,15 +1127,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
-                                    ? screenFontSize * 0.020
+                                    ? screenFontSize * 0.018
                                     : screenFontSize * 0.016,
                             Colors.white),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1245,7 +1245,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1262,7 +1262,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1279,9 +1279,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1296,9 +1296,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1376,7 +1376,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1402,7 +1402,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.6
                                 : screenWidth >= 320
                                     ? screenWidth / 6.5
                                     : screenWidth / 5,
@@ -1428,9 +1428,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1454,9 +1454,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                         SizedBox(width: screenWidth * 0.008),
                         _buildButton(
                             screenWidth >= 480
-                                ? screenWidth / 8
+                                ? screenWidth / 7.1
                                 : screenWidth >= 320
-                                    ? screenWidth / 6.25
+                                    ? screenWidth / 6.5
                                     : screenWidth / 5,
                             screenHeight >= 1000
                                 ? screenHeight / 22
@@ -1472,7 +1472,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             "เปลี่ยน",
                             buttonChange,
                             screenFontSize >= 480
-                                ? screenFontSize * 0.025
+                                ? screenFontSize * 0.022
                                 : screenFontSize >= 320
                                     ? screenFontSize * 0.018
                                     : screenFontSize * 0.016,
@@ -1547,7 +1547,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1578,7 +1578,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1609,9 +1609,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.1
                                         : screenWidth >= 320
-                                            ? screenWidth / 6.25
+                                            ? screenWidth / 6.5
                                             : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
@@ -1704,7 +1704,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1735,7 +1735,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1766,9 +1766,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.1
                                         : screenWidth >= 320
-                                            ? screenWidth / 6.25
+                                            ? screenWidth / 6.5
                                             : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
@@ -1908,7 +1908,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1939,7 +1939,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.6
                                         : screenWidth >= 320
                                             ? screenWidth / 6.5
                                             : screenWidth / 5,
@@ -1970,9 +1970,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 SizedBox(width: screenWidth * 0.01),
                                 _buildButton(
                                     screenWidth >= 480
-                                        ? screenWidth / 8
+                                        ? screenWidth / 7.1
                                         : screenWidth >= 320
-                                            ? screenWidth / 6.25
+                                            ? screenWidth / 6.5
                                             : screenWidth / 5,
                                     screenHeight >= 1000
                                         ? screenHeight / 22
@@ -2008,12 +2008,12 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           children: [
                             _buildButton(
                                 screenWidth >= 480
-                                    ? screenWidth / 8
+                                    ? screenWidth / 7.1
                                     : screenWidth >= 320
                                         ? screenWidth / 6.25
                                         : screenWidth / 5,
                                 screenHeight >= 1000
-                                    ? screenHeight / 6
+                                    ? screenHeight / 6.6
                                     : screenHeight >= 679
                                         ? screenHeight / 5.2
                                         : screenHeight / 6.6, () async {

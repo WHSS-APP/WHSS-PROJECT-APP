@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:project_whss_app/controller/file_controller.dart';
 import 'package:project_whss_app/model/job.dart';
+import 'package:project_whss_app/screens/detail.dart';
 import 'package:project_whss_app/screens/equipment_check.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class EquipmentInspectionRecord extends StatefulWidget {
   const EquipmentInspectionRecord({Key? key});
@@ -15,6 +17,7 @@ class EquipmentInspectionRecord extends StatefulWidget {
 }
 
 class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
+  List<String> items = ['C', 'A', 'B'];
   late List<Job> filteredData = [];
   // ignore: non_constant_identifier_names
   late List<Job> result_data = context.read<FileController>().job!;
@@ -24,20 +27,82 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
     });
   }
 
+  void sortByStructure() {
+    print(filteredData.map((data) => data.location.strc + data.location.loct));
+    filteredData.sort((a, b) => a.location.strc.compareTo(b.location.strc));
+    print("result_data ---------------------------");
+    print(filteredData);
+  }
+
+  void sortByImageTime() {}
+
+  void sortByDMG() {}
+
   @override
   void initState() {
     super.initState();
+    requestPermission();
     filteredData = result_data.toList();
     refreshData();
   }
 
+  void requestPermission() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      await Permission.storage.request();
+    }
+
+    var statusCamera = await Permission.camera.status;
+    if (statusCamera.isGranted) {
+      await Permission.camera.request();
+    }
+
+    var statusManageExternalStorage =
+        await Permission.manageExternalStorage.status;
+    if (statusManageExternalStorage.isGranted) {
+      await Permission.manageExternalStorage.request();
+    }
+  }
+
+  // Example function to request external storage permission
+  Future<void> requestExternalStoragePermission() async {
+    var status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      print("Permission granted");
+      // Permission granted, you can now access external storage.
+      // You can perform file I/O operations here.
+    } else if (status.isDenied) {
+      // Permission denied.
+      // You might want to inform the user and provide guidance on how to enable the permission.
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied.
+      // You might want to open the app settings to allow the user to enable the permission manually.
+      openAppSettings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    double screenFontSize = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    requestExternalStoragePermission();
+
     context.read<FileController>().readJobs();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Equipment Inspection Record"),
+        title: Text(
+          "Equipment Inspection Record",
+          style: TextStyle(
+            fontSize: screenFontSize >= 480
+                ? 18
+                : screenFontSize >= 320
+                    ? 12
+                    : 10,
+          ),
+        ),
         backgroundColor: Color(0xFF151D28),
         leading: BackButton(
           color: Colors.white,
@@ -50,6 +115,34 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
             );
           },
         ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == "ชื่อโครงสร้าง") {
+                sortByStructure();
+              } else if (value == "เวลาที่ถ่ายภาพ - เก่าสุด") {
+                sortByImageTime();
+              } else if (value == "DMG") {
+                sortByDMG();
+              }
+
+              // หลังจากที่คุณเรียงลำดับ result_data ใหม่แล้ว คุณอาจต้องอัพเดทหน้า UI โดยการสร้าง setState() หรือเมธอดอื่น ๆ ที่เหมาะสม
+              setState(() {
+                // สิ่งที่คุณต้องการทำหลังจากการเรียงลำดับ
+                // ยกตัวอย่าง: การอัพเดทหน้า UI
+              });
+            },
+            itemBuilder: (BuildContext context) {
+              return ["ชื่อโครงสร้าง", "เวลาที่ถ่ายภาพ - เก่าสุด", "DMG"]
+                  .map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
@@ -75,34 +168,41 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                     ],
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: TextField(
-                      decoration: InputDecoration(
-                        hintText: '',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: screenWidth >= 480
+                        ? screenWidth / 1
+                        : screenWidth >= 320
+                            ? screenWidth / 1.1
+                            : screenWidth / 1.3,
+                    child: TextField(
+                        decoration: InputDecoration(
+                          hintText: '',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText:
+                              'ค้นหาด้วย เลขภาพ, ตำแหน่ง, ความเสียหาย, การแก้ไข...',
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
                         ),
-                        labelText:
-                            'ค้นหาด้วย เลขภาพ, ตำแหน่ง, ความเสียหาย, การแก้ไข...',
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      onChanged: (query) {
-                        setState(() {
-                          filteredData = result_data
-                              .where((item) =>
-                                  item.itemName.contains(query) ||
-                                  (item.location.strc + item.location.loct)
-                                      .contains(query) ||
-                                  (item.location.loct.contains(query)) ||
-                                  (item.status.contains(query)) ||
-                                  (item.damage.damge.contains(query)) ||
-                                  (item.damage.code.contains(query)))
-                              .toList();
-                        });
-                      }),
+                        onChanged: (query) {
+                          setState(() {
+                            filteredData = result_data
+                                .where((item) =>
+                                    item.itemName.contains(query) ||
+                                    (item.location.strc + item.location.loct)
+                                        .contains(query) ||
+                                    (item.location.loct.contains(query)) ||
+                                    (item.status.contains(query)) ||
+                                    (item.damage.damge.contains(query)) ||
+                                    (item.damage.code.contains(query)))
+                                .toList();
+                          });
+                        }),
+                  ),
                 ),
                 SizedBox(height: 10),
                 Column(
@@ -136,7 +236,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EquipmentCheck(
+                                  builder: (context) => Detail(
                                     keyValue: data.itemName,
                                     strcValue: data.location.strc,
                                     loctValue: data.location.loct,
@@ -161,12 +261,28 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                     data.picturePath != ''
                                         ? Image.file(
                                             File(data.picturePath),
-                                            width: 130,
-                                            height: 130,
+                                            width: screenWidth >= 480
+                                                ? screenWidth / 3.2
+                                                : screenWidth >= 320
+                                                    ? screenWidth / 4
+                                                    : screenWidth / 4.2,
+                                            // height: screenHeight >= 1000
+                                            //     ? screenHeight / 8
+                                            //     : screenHeight >= 679
+                                            //         ? screenHeight / 18
+                                            //         : screenHeight / 18,
                                           )
                                         : Container(
-                                            width: 130,
-                                            height: 130,
+                                            width: screenWidth >= 480
+                                                ? screenWidth / 3.2
+                                                : screenWidth >= 320
+                                                    ? screenWidth / 4
+                                                    : screenWidth / 4.2,
+                                            height: screenHeight >= 1000
+                                                ? 150
+                                                : screenHeight >= 679
+                                                    ? 120
+                                                    : 100,
                                             color: Colors.grey,
                                             child: Icon(
                                               Icons.image,
@@ -177,7 +293,7 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 8,
+                                  width: 6,
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -189,8 +305,11 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                         borderRadius:
                                             BorderRadius.circular(8.0),
                                       ),
-                                      width: MediaQuery.of(context).size.width -
-                                          190,
+                                      width: screenWidth >= 480
+                                          ? screenWidth / 1.75
+                                          : screenWidth >= 320
+                                              ? screenWidth / 1.75
+                                              : screenWidth / 1.85,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Row(
@@ -203,6 +322,12 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                 color: Color.fromRGBO(
                                                     255, 153, 0, 1),
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: screenFontSize >= 480
+                                                    ? screenFontSize * 0.035
+                                                    : screenFontSize >= 320
+                                                        ? screenFontSize * 0.03
+                                                        : screenFontSize *
+                                                            0.028,
                                               ),
                                             ),
                                             Text(
@@ -210,6 +335,12 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: screenFontSize >= 480
+                                                    ? screenFontSize * 0.035
+                                                    : screenFontSize >= 320
+                                                        ? screenFontSize * 0.03
+                                                        : screenFontSize *
+                                                            0.028,
                                               ),
                                             ),
                                           ],
@@ -218,8 +349,11 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                     ),
                                     SizedBox(height: 5),
                                     Container(
-                                      width: MediaQuery.of(context).size.width -
-                                          190,
+                                      width: screenWidth >= 480
+                                          ? screenWidth / 1.75
+                                          : screenWidth >= 320
+                                              ? screenWidth / 1.75
+                                              : screenWidth / 1.85,
                                       decoration: BoxDecoration(
                                         color: Color.fromRGBO(21, 29, 40, 1),
                                         borderRadius:
@@ -239,6 +373,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                                 Row(
@@ -247,12 +389,32 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                       data.location.strc,
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       data.location.loct,
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                   ],
@@ -269,6 +431,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                                 Row(
@@ -277,42 +447,112 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                       data.level,
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       " ",
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       "(BLK",
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       data.block,
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       ",DRT",
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       data.direction,
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                     Text(
                                                       ")",
                                                       style: TextStyle(
                                                         color: Colors.white,
+                                                        fontSize: screenFontSize >=
+                                                                480
+                                                            ? screenFontSize *
+                                                                0.035
+                                                            : screenFontSize >=
+                                                                    320
+                                                                ? screenFontSize *
+                                                                    0.03
+                                                                : screenFontSize *
+                                                                    0.028,
                                                       ),
                                                     ),
                                                   ],
@@ -329,6 +569,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                                 Text(
@@ -336,6 +584,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                       data.damage.code,
                                                   style: TextStyle(
                                                     color: Colors.white,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                               ],
@@ -350,6 +606,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                                 Text(
@@ -359,6 +623,14 @@ class _EquipmentInspectionRecordState extends State<EquipmentInspectionRecord> {
                                                       : "-",
                                                   style: TextStyle(
                                                     color: Colors.white,
+                                                    fontSize: screenFontSize >=
+                                                            480
+                                                        ? screenFontSize * 0.035
+                                                        : screenFontSize >= 320
+                                                            ? screenFontSize *
+                                                                0.03
+                                                            : screenFontSize *
+                                                                0.028,
                                                   ),
                                                 ),
                                               ],

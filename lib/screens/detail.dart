@@ -501,7 +501,7 @@ class _DetailState extends State<Detail> {
             children: [
               SizedBox(
                 width: screenWidth >= 480
-                    ? screenWidth / 1.9
+                    ? screenWidth / 1.4
                     : screenWidth >= 320
                         ? screenWidth / 1.32
                         : screenWidth / 1.4,
@@ -516,7 +516,7 @@ class _DetailState extends State<Detail> {
                     "แก้ไข",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: 12.5,
                         fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
@@ -549,7 +549,7 @@ class _DetailState extends State<Detail> {
             children: [
               SizedBox(
                 width: screenWidth >= 480
-                    ? screenWidth / 1.9
+                    ? screenWidth / 1.4
                     : screenWidth >= 320
                         ? screenWidth / 1.32
                         : screenWidth / 1.4,
@@ -564,7 +564,7 @@ class _DetailState extends State<Detail> {
                     "ลบ",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: 12.5,
                         fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {

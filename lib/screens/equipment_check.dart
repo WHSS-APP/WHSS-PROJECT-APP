@@ -1411,7 +1411,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28, () {
                           _changeButtonColor(
                             Color.fromRGBO(210, 255, 225, 1),
-                            Color.fromRGBO(255, 197, 37, 1),
+                            Color.fromRGBO(253, 247, 81, 1),
                             Color.fromRGBO(254, 222, 186, 1),
                             Color.fromRGBO(255, 170, 180, 1),
                           );

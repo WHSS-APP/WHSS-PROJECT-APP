@@ -91,24 +91,24 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
 
   void refreshButtonPressed() {
     setState(() {
-      buttonWarning = Color.fromRGBO(176, 34, 42, 1);
+      buttonWarning = Color.fromRGBO(121, 37, 128, 1);
       buttonRepair = Color.fromRGBO(214, 129, 29, 1);
       buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
-      buttonChange = Color.fromRGBO(89, 96, 91, 1);
+      buttonChange = Color.fromRGBO(54, 164, 205, 1);
 
       //Clear BLK
-      BLKbtn1 = Color.fromRGBO(89, 96, 91, 1);
-      BLKbtn2 = Color.fromRGBO(89, 96, 91, 1);
-      BLKbtn3 = Color.fromRGBO(89, 96, 91, 1);
-      BLKbtn4 = Color.fromRGBO(89, 96, 91, 1);
-      BLKbtnAdd = Color.fromRGBO(89, 96, 91, 1);
+      BLKbtn1 = Color.fromRGBO(54, 164, 205, 1);
+      BLKbtn2 = Color.fromRGBO(54, 164, 205, 1);
+      BLKbtn3 = Color.fromRGBO(54, 164, 205, 1);
+      BLKbtn4 = Color.fromRGBO(54, 164, 205, 1);
+      BLKbtnAdd = Color.fromRGBO(54, 164, 205, 1);
 
       //Clear LVL
-      LVLbtn1 = Color.fromRGBO(146, 136, 125, 1);
-      LVLbtn2 = Color.fromRGBO(146, 136, 125, 1);
-      LVLbtn3 = Color.fromRGBO(146, 136, 125, 1);
-      LVLbtn4 = Color.fromRGBO(146, 136, 125, 1);
-      LVLbtnAdd = Color.fromRGBO(146, 136, 125, 1);
+      LVLbtn1 = Color.fromRGBO(210, 90, 37, 1);
+      LVLbtn2 = Color.fromRGBO(210, 90, 37, 1);
+      LVLbtn3 = Color.fromRGBO(210, 90, 37, 1);
+      LVLbtn4 = Color.fromRGBO(210, 90, 37, 1);
+      LVLbtnAdd = Color.fromRGBO(210, 90, 37, 1);
 
       //Clear Num
       Numbtn1 = Color.fromRGBO(3, 98, 166, 1);
@@ -270,10 +270,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     );
   }
 
-  Color buttonWarning = Color.fromRGBO(176, 34, 42, 1);
-  Color buttonRepair = Color.fromRGBO(214, 129, 29, 1);
-  Color buttonSupplement = Color.fromRGBO(55, 167, 93, 1);
-  Color buttonChange = Color.fromRGBO(89, 96, 91, 1);
+  Color buttonWarning = Color.fromRGBO(47, 173, 90, 1);
+  Color buttonRepair = Color.fromRGBO(253, 247, 81, 1);
+  Color buttonSupplement = Color.fromRGBO(214, 129, 29, 1);
+  Color buttonChange = Color.fromRGBO(215, 49, 58, 1);
 
   void _changeButtonColor(
     Color warningColor,
@@ -289,11 +289,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     });
   }
 
-  Color BLKbtn1 = Color.fromRGBO(89, 96, 91, 1);
-  Color BLKbtn2 = Color.fromRGBO(89, 96, 91, 1);
-  Color BLKbtn3 = Color.fromRGBO(89, 96, 91, 1);
-  Color BLKbtn4 = Color.fromRGBO(89, 96, 91, 1);
-  Color BLKbtnAdd = Color.fromRGBO(89, 96, 91, 1);
+  Color BLKbtn1 = Color.fromRGBO(54, 164, 205, 1);
+  Color BLKbtn2 = Color.fromRGBO(54, 164, 205, 1);
+  Color BLKbtn3 = Color.fromRGBO(54, 164, 205, 1);
+  Color BLKbtn4 = Color.fromRGBO(54, 164, 205, 1);
+  Color BLKbtnAdd = Color.fromRGBO(54, 164, 205, 1);
 
   void _changeButtonBLKColor(
       Color btn1, Color btn2, Color btn3, Color btn4, Color btnAdd) {
@@ -306,11 +306,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     });
   }
 
-  Color LVLbtn1 = Color.fromRGBO(146, 136, 125, 1);
-  Color LVLbtn2 = Color.fromRGBO(146, 136, 125, 1);
-  Color LVLbtn3 = Color.fromRGBO(146, 136, 125, 1);
-  Color LVLbtn4 = Color.fromRGBO(146, 136, 125, 1);
-  Color LVLbtnAdd = Color.fromRGBO(146, 136, 125, 1);
+  Color LVLbtn1 = Color.fromRGBO(210, 90, 37, 1);
+  Color LVLbtn2 = Color.fromRGBO(210, 90, 37, 1);
+  Color LVLbtn3 = Color.fromRGBO(210, 90, 37, 1);
+  Color LVLbtn4 = Color.fromRGBO(210, 90, 37, 1);
+  Color LVLbtnAdd = Color.fromRGBO(210, 90, 37, 1);
 
   void _changeButtonLVLColor(
       Color btn1, Color btn2, Color btn3, Color btn4, Color btnAdd) {
@@ -617,102 +617,102 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     //Change LVL
     if (int.tryParse(selectLVL) != null) {
       int valueLVL = int.parse(selectLVL);
-      if (valueLVL > 4) {
+      if (valueLVL > 3) {
         LVL = valueLVL.toString();
         _LvlEditingController.text = LVL;
         _changeButtonLVLColor(
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(146, 136, 125, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(210, 90, 37, 1),
         );
       }
-      if (valueLVL == 1) {
+      if (valueLVL == 0) {
         _changeButtonLVLColor(
-          Color.fromRGBO(146, 136, 125, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(210, 90, 37, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+        );
+      } else if (valueLVL == 1) {
+        _changeButtonLVLColor(
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(210, 90, 37, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
         );
       } else if (valueLVL == 2) {
         _changeButtonLVLColor(
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(146, 136, 125, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(210, 90, 37, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
         );
       } else if (valueLVL == 3) {
         _changeButtonLVLColor(
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(146, 136, 125, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-        );
-      } else if (valueLVL == 4) {
-        _changeButtonLVLColor(
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(204, 191, 178, 1),
-          Color.fromRGBO(146, 136, 125, 1),
-          Color.fromRGBO(204, 191, 178, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(253, 187, 155, 1),
+          Color.fromRGBO(210, 90, 37, 1),
+          Color.fromRGBO(253, 187, 155, 1),
         );
       }
     }
     //Change BLK
     if (int.tryParse(selectBLK) != null) {
       int valueBLK = int.parse(selectBLK);
-      if (valueBLK > 4) {
+      if (valueBLK > 3) {
         BLK = valueBLK.toString();
         _BlkEditingController.text = BLK;
         _changeButtonBLKColor(
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(89, 96, 91, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(54, 164, 205, 1),
         );
       }
-      if (valueBLK == 1) {
+      if (valueBLK == 0) {
         _changeButtonBLKColor(
-          Color.fromRGBO(89, 96, 91, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(54, 164, 205, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+        );
+      } else if (valueBLK == 1) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(54, 164, 205, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
         );
       } else if (valueBLK == 2) {
         _changeButtonBLKColor(
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(89, 96, 91, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(54, 164, 205, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
         );
       } else if (valueBLK == 3) {
         _changeButtonBLKColor(
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(89, 96, 91, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-        );
-      } else if (valueBLK == 4) {
-        _changeButtonBLKColor(
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(187, 189, 188, 1),
-          Color.fromRGBO(89, 96, 91, 1),
-          Color.fromRGBO(187, 189, 188, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(54, 164, 205, 1),
+          Color.fromRGBO(156, 226, 255, 1),
         );
       }
     }
     selectWarning == 'เตือน'
         ? (_changeButtonColor(
-            Color.fromRGBO(176, 34, 42, 1),
+            Color.fromRGBO(47, 173, 90, 1),
             Color.fromRGBO(221, 200, 177, 1),
             Color.fromRGBO(168, 217, 184, 1),
             Color.fromRGBO(167, 171, 168, 1),
@@ -720,10 +720,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         : buttonWarning;
     selectRepair == 'ซ่อม'
         ? (_changeButtonColor(
-            Color.fromRGBO(238, 167, 171, 1),
-            Color.fromRGBO(214, 129, 29, 1),
             Color.fromRGBO(168, 217, 184, 1),
             Color.fromRGBO(167, 171, 168, 1),
+            Color.fromRGBO(255, 177, 89, 1),
+            Color.fromRGBO(238, 167, 171, 1),
           ))
         : buttonRepair;
     selectSupplement == 'เสริม'
@@ -739,7 +739,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
             Color.fromRGBO(238, 167, 171, 1),
             Color.fromRGBO(221, 200, 177, 1),
             Color.fromRGBO(168, 217, 184, 1),
-            Color.fromRGBO(89, 96, 91, 1)))
+            Color.fromRGBO(54, 164, 205, 1)))
         : buttonChange;
   }
 
@@ -941,7 +941,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             "BLK",
-                            Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(54, 164, 205, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -960,7 +960,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             "LVL",
-                            Color.fromRGBO(146, 136, 125, 1),
+                            Color.fromRGBO(210, 90, 37, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -1013,7 +1013,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           );
                         },
                             "STRC",
-                            Color.fromRGBO(176, 34, 42, 1),
+                            Color.fromRGBO(121, 37, 128, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -1060,7 +1060,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           );
                         },
                             "LOCT",
-                            Color.fromRGBO(249, 152, 36, 1),
+                            Color.fromRGBO(121, 37, 128, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -1123,7 +1123,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           );
                         },
                             "DAMG",
-                            Color.fromRGBO(55, 167, 93, 1),
+                            Color.fromRGBO(177, 55, 131, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -1172,7 +1172,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                           );
                         },
                             "CODE",
-                            Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(177, 55, 131, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.025
                                 : screenFontSize >= 320
@@ -1199,15 +1199,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonBLKColor(
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(89, 96, 91, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(54, 164, 205, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
                           );
-                          selectBLK = '4';
+                          selectBLK = '3';
                         },
-                            '4',
+                            '3',
                             BLKbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1226,15 +1226,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonLVLColor(
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(146, 136, 125, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(210, 90, 37, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
                           );
-                          selectLVL = '4';
+                          selectLVL = '3';
                         },
-                            "4",
+                            "3",
                             LVLbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1254,7 +1254,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             checkSTRC != '' ? checkSTRC : '',
-                            Color.fromRGBO(176, 34, 42, 1),
+                            Color.fromRGBO(196, 122, 203, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -1271,7 +1271,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             checkLOCT != '' ? checkLOCT : '',
-                            Color.fromRGBO(249, 152, 36, 1),
+                            Color.fromRGBO(196, 122, 203, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -1288,7 +1288,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             checkDAMG != '' ? checkDAMG : '',
-                            Color.fromRGBO(55, 167, 93, 1),
+                            Color.fromRGBO(222, 140, 190, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -1305,7 +1305,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenHeight / 28,
                             () {},
                             checkCODE != '' ? checkCODE : '',
-                            Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(222, 140, 190, 1),
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
                                 : screenFontSize * 0.03,
@@ -1330,15 +1330,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonBLKColor(
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(89, 96, 91, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
-                            Color.fromRGBO(187, 189, 188, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(54, 164, 205, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
+                            Color.fromRGBO(156, 226, 255, 1),
                           );
-                          selectBLK = '3';
+                          selectBLK = '2';
                         },
-                            '3',
+                            '2',
                             BLKbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1357,15 +1357,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonLVLColor(
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(146, 136, 125, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
-                            Color.fromRGBO(204, 191, 178, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(210, 90, 37, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
+                            Color.fromRGBO(253, 187, 155, 1),
                           );
-                          selectLVL = '3';
+                          selectLVL = '2';
                         },
-                            "3",
+                            "2",
                             LVLbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1384,10 +1384,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonColor(
-                            Color.fromRGBO(176, 34, 42, 1),
-                            Color.fromRGBO(221, 200, 177, 1),
-                            Color.fromRGBO(168, 217, 184, 1),
-                            Color.fromRGBO(167, 171, 168, 1),
+                            Color.fromRGBO(37, 195, 90, 1),
+                            Color.fromRGBO(255, 252, 213, 1),
+                            Color.fromRGBO(254, 222, 186, 1),
+                            Color.fromRGBO(255, 170, 180, 1),
                           );
                           selectWarning = 'เตือน';
                         },
@@ -1410,10 +1410,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonColor(
-                            Color.fromRGBO(238, 167, 171, 1),
-                            Color.fromRGBO(214, 129, 29, 1),
-                            Color.fromRGBO(168, 217, 184, 1),
-                            Color.fromRGBO(167, 171, 168, 1),
+                            Color.fromRGBO(210, 255, 225, 1),
+                            Color.fromRGBO(255, 197, 37, 1),
+                            Color.fromRGBO(254, 222, 186, 1),
+                            Color.fromRGBO(255, 170, 180, 1),
                           );
                           selectRepair = 'ซ่อม';
                         },
@@ -1424,7 +1424,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 : screenFontSize >= 320
                                     ? screenFontSize * 0.023
                                     : screenFontSize * 0.016,
-                            Colors.white),
+                            Color.fromARGB(255, 131, 131, 131)),
                         SizedBox(width: screenWidth * 0.01),
                         _buildButton(
                             screenWidth >= 480
@@ -1436,10 +1436,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonColor(
-                            Color.fromRGBO(238, 167, 171, 1),
-                            Color.fromRGBO(221, 200, 177, 1),
-                            Color.fromRGBO(55, 167, 93, 1),
-                            Color.fromRGBO(167, 171, 168, 1),
+                            Color.fromRGBO(210, 255, 225, 1),
+                            Color.fromRGBO(255, 252, 213, 1),
+                            Color.fromRGBO(214, 129, 29, 1),
+                            Color.fromRGBO(255, 170, 180, 1),
                           );
                           selectSupplement = 'เสริม';
                         },
@@ -1462,10 +1462,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                 ? screenHeight / 22
                                 : screenHeight / 28, () {
                           _changeButtonColor(
-                            Color.fromRGBO(238, 167, 171, 1),
-                            Color.fromRGBO(221, 200, 177, 1),
-                            Color.fromRGBO(168, 217, 184, 1),
-                            Color.fromRGBO(89, 96, 91, 1),
+                            Color.fromRGBO(210, 255, 225, 1),
+                            Color.fromRGBO(255, 252, 213, 1),
+                            Color.fromRGBO(254, 222, 186, 1),
+                            Color.fromRGBO(215, 49, 58, 1),
                           );
                           selectChange = 'เปลี่ยน';
                         },
@@ -1501,15 +1501,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
                                   _changeButtonBLKColor(
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(89, 96, 91, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(54, 164, 205, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
                                   );
-                                  selectBLK = '2';
+                                  selectBLK = '1';
                                 },
-                                    "2",
+                                    "1",
                                     BLKbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
@@ -1528,15 +1528,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
                                   _changeButtonLVLColor(
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(146, 136, 125, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(210, 90, 37, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
                                   );
-                                  selectLVL = '2';
+                                  selectLVL = '1';
                                 },
-                                    "2",
+                                    "1",
                                     LVLbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
@@ -1658,15 +1658,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
                                   _changeButtonBLKColor(
-                                    Color.fromRGBO(89, 96, 91, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
-                                    Color.fromRGBO(187, 189, 188, 1),
+                                    Color.fromRGBO(54, 164, 205, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
+                                    Color.fromRGBO(156, 226, 255, 1),
                                   );
-                                  selectBLK = '1';
+                                  selectBLK = '0';
                                 },
-                                    "1",
+                                    "0",
                                     BLKbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
@@ -1685,15 +1685,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                         ? screenHeight / 22
                                         : screenHeight / 28, () {
                                   _changeButtonLVLColor(
-                                    Color.fromRGBO(146, 136, 125, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
-                                    Color.fromRGBO(204, 191, 178, 1),
+                                    Color.fromRGBO(210, 90, 37, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
+                                    Color.fromRGBO(253, 187, 155, 1),
                                   );
-                                  selectLVL = '1';
+                                  selectLVL = '0';
                                 },
-                                    "1",
+                                    "0",
                                     LVLbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
@@ -1832,7 +1832,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     ),
                                     decoration: const InputDecoration(
                                       filled: true, // ทำให้มีพื้นหลัง
-                                      fillColor: Color.fromRGBO(89, 96, 91, 1),
+                                      fillColor:
+                                          Color.fromRGBO(54, 164, 205, 1),
                                       hintText: 'IN',
                                       hintStyle: TextStyle(
                                           color: Color.fromARGB(
@@ -1844,11 +1845,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                       setState(() {
                                         selectBLK = BLK;
                                         _changeButtonBLKColor(
-                                          Color.fromRGBO(187, 189, 188, 1),
-                                          Color.fromRGBO(187, 189, 188, 1),
-                                          Color.fromRGBO(187, 189, 188, 1),
-                                          Color.fromRGBO(187, 189, 188, 1),
-                                          Color.fromRGBO(89, 96, 91, 1),
+                                          Color.fromRGBO(156, 226, 255, 1),
+                                          Color.fromRGBO(156, 226, 255, 1),
+                                          Color.fromRGBO(156, 226, 255, 1),
+                                          Color.fromRGBO(156, 226, 255, 1),
+                                          Color.fromRGBO(54, 164, 205, 1),
                                         );
                                       });
                                     },
@@ -1882,8 +1883,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     ),
                                     decoration: const InputDecoration(
                                       filled: true,
-                                      fillColor:
-                                          Color.fromRGBO(146, 136, 125, 1),
+                                      fillColor: Color.fromRGBO(210, 90, 37, 1),
                                       hintText: 'IN',
                                       hintStyle: TextStyle(
                                           color: Color.fromARGB(
@@ -1895,11 +1895,11 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                       setState(() {
                                         selectLVL = LVL;
                                         _changeButtonLVLColor(
-                                          Color.fromRGBO(204, 191, 178, 1),
-                                          Color.fromRGBO(204, 191, 178, 1),
-                                          Color.fromRGBO(204, 191, 178, 1),
-                                          Color.fromRGBO(204, 191, 178, 1),
-                                          Color.fromRGBO(146, 136, 125, 1),
+                                          Color.fromRGBO(253, 187, 155, 1),
+                                          Color.fromRGBO(253, 187, 155, 1),
+                                          Color.fromRGBO(253, 187, 155, 1),
+                                          Color.fromRGBO(253, 187, 155, 1),
+                                          Color.fromRGBO(210, 90, 37, 1),
                                         );
                                       });
                                     },

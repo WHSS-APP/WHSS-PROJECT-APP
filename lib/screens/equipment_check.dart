@@ -665,7 +665,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     //Change BLK
     if (int.tryParse(selectBLK) != null) {
       int valueBLK = int.parse(selectBLK);
-      if (valueBLK > 3) {
+      if (valueBLK > 4) {
         BLK = valueBLK.toString();
         _BlkEditingController.text = BLK;
         _changeButtonBLKColor(
@@ -676,18 +676,10 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
           Color.fromRGBO(54, 164, 205, 1),
         );
       }
-      if (valueBLK == 0) {
+      if (valueBLK == 1) {
         _changeButtonBLKColor(
           Color.fromRGBO(54, 164, 205, 1),
           Color.fromRGBO(156, 226, 255, 1),
-          Color.fromRGBO(156, 226, 255, 1),
-          Color.fromRGBO(156, 226, 255, 1),
-          Color.fromRGBO(156, 226, 255, 1),
-        );
-      } else if (valueBLK == 1) {
-        _changeButtonBLKColor(
-          Color.fromRGBO(156, 226, 255, 1),
-          Color.fromRGBO(54, 164, 205, 1),
           Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(156, 226, 255, 1),
@@ -695,12 +687,20 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       } else if (valueBLK == 2) {
         _changeButtonBLKColor(
           Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(54, 164, 205, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+          Color.fromRGBO(156, 226, 255, 1),
+        );
+      } else if (valueBLK == 3) {
+        _changeButtonBLKColor(
+          Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(54, 164, 205, 1),
           Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(156, 226, 255, 1),
         );
-      } else if (valueBLK == 3) {
+      } else if (valueBLK == 4) {
         _changeButtonBLKColor(
           Color.fromRGBO(156, 226, 255, 1),
           Color.fromRGBO(156, 226, 255, 1),
@@ -1205,9 +1205,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(54, 164, 205, 1),
                             Color.fromRGBO(156, 226, 255, 1),
                           );
-                          selectBLK = '3';
+                          selectBLK = '4';
                         },
-                            '3',
+                            '4',
                             BLKbtn4,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1336,9 +1336,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(156, 226, 255, 1),
                             Color.fromRGBO(156, 226, 255, 1),
                           );
-                          selectBLK = '2';
+                          selectBLK = '3';
                         },
-                            '2',
+                            '3',
                             BLKbtn3,
                             screenFontSize >= 480
                                 ? screenFontSize * 0.03
@@ -1507,9 +1507,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(156, 226, 255, 1),
                                     Color.fromRGBO(156, 226, 255, 1),
                                   );
-                                  selectBLK = '1';
+                                  selectBLK = '2';
                                 },
-                                    "1",
+                                    "2",
                                     BLKbtn2,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03
@@ -1664,9 +1664,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                                     Color.fromRGBO(156, 226, 255, 1),
                                     Color.fromRGBO(156, 226, 255, 1),
                                   );
-                                  selectBLK = '0';
+                                  selectBLK = '1';
                                 },
-                                    "0",
+                                    "1",
                                     BLKbtn1,
                                     screenFontSize >= 480
                                         ? screenFontSize * 0.03

@@ -187,9 +187,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                       imagesDir.createSync(recursive: true);
                     }
 
-                    final newImagePath = '${imagesDir.path}/$keyValue.png';
+                    final newImagePath = '${imagesDir.path}/$keyValue.jpg';
                     final moveImagePath =
-                        '${updateImageDir.path}/$_itemName.png';
+                        '${updateImageDir.path}/$_itemName.jpg';
 
                     if (File(newImagePath).existsSync()) {
                       File(newImagePath).renameSync(moveImagePath);
@@ -360,8 +360,8 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
   Future _pickImageFromCamera() async {
     final returnedImage = await ImagePicker().pickImage(
         source: ImageSource.camera,
-        maxWidth: 400,
-        maxHeight: 400,
+        maxWidth: 1200,
+        maxHeight: 1200,
         imageQuality: 100);
 
     if (returnedImage == null) return;
@@ -395,9 +395,9 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
       }
 
       if (_itemName != '' && _itemName != null) {
-        final newImagePath = '${imagesDir.path}/$_itemName.png';
+        final newImagePath = '${imagesDir.path}/$_itemName.jpg';
 
-        final moveImagePath = '${updateImageDir.path}/$_itemName.png';
+        final moveImagePath = '${updateImageDir.path}/$_itemName.jpg';
 
         if (File(newImagePath).existsSync()) {
           // moveFile newImagePath to recheckImage
@@ -409,21 +409,21 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
         //   height: 400,
         // );
 
-        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
+        File(newImagePath).writeAsBytesSync(img.encodeJpg(originalImage));
 
         setState(() {
           _filePath = newImagePath;
           _selectedImage = File(newImagePath);
         });
       } else {
-        final newImagePath = '${imagesDir.path}/K$formattedDate.png';
+        final newImagePath = '${imagesDir.path}/K$formattedDate.jpg';
 
         // final resizedImage =
         //     img.copyResize(originalImage, width: 400, height: 400);
 
         // final resizedImage = img.copyResizeCropSquare(originalImage, size: 400);
 
-        File(newImagePath).writeAsBytesSync(img.encodePng(originalImage));
+        File(newImagePath).writeAsBytesSync(img.encodeJpg(originalImage));
 
         setState(() {
           _filePath = newImagePath;

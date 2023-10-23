@@ -89,6 +89,15 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
     });
   }
 
+  void refreshSelectStatus() {
+    setState(() {
+      selectWarning = '';
+      selectRepair = '';
+      selectSupplement = '';
+      selectChange = '';
+    });
+  }
+
   void refreshButtonPressed() {
     setState(() {
       buttonWarning = Color.fromRGBO(121, 37, 128, 1);
@@ -1389,6 +1398,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(254, 222, 186, 1),
                             Color.fromRGBO(255, 170, 180, 1),
                           );
+                          refreshSelectStatus();
                           selectWarning = 'เตือน';
                         },
                             "เตือน",
@@ -1415,6 +1425,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(254, 222, 186, 1),
                             Color.fromRGBO(255, 170, 180, 1),
                           );
+                          refreshSelectStatus();
                           selectRepair = 'ซ่อม';
                         },
                             "ซ่อม",
@@ -1441,6 +1452,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(214, 129, 29, 1),
                             Color.fromRGBO(255, 170, 180, 1),
                           );
+                          refreshSelectStatus();
                           selectSupplement = 'เสริม';
                         },
                             "เสริม",
@@ -1467,6 +1479,7 @@ class _EquipmentCheckState extends State<EquipmentCheck> {
                             Color.fromRGBO(254, 222, 186, 1),
                             Color.fromRGBO(215, 49, 58, 1),
                           );
+                          refreshSelectStatus();
                           selectChange = 'เปลี่ยน';
                         },
                             "เปลี่ยน",
